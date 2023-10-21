@@ -1,0 +1,11 @@
+body {
+    background-color: lightgrey;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+#css-section {
+    background-color: burlywood;
+    width: fit-content;
+    font-size: medium;
+    font-weight: bold;
+}
