@@ -44,5 +44,56 @@
 //     odd[i].style.backgroundColor = "#f4f4f4";
 // }
 
+// DOM manipulation Task 7
+// parent element
+const headerTitle = document.getElementById("header-title");
+const parentElement = headerTitle.parentElement;
+console.log(parentElement);
+// last child element
+const mainDiv = document.getElementById("main");
+const lastElementChild = mainDiv.lastElementChild;
+console.log(lastElementChild);
+// lastchild
+const lastChild = mainDiv.lastChild;
+console.log(lastChild);
+// first element child
+const firstElementChild = mainDiv.firstElementChild;
+console.log(firstElementChild);
+// nextsibling
+const formElement = document.querySelector("form");
+const nextSibling = formElement.nextSibling;
+console.log(nextSibling);
+// nextsibling element
+const nextElementSibling = formElement.nextElementSibling;
+console.log(nextElementSibling);
+//previous sibling 
+const ulElement = document.getElementById("items");
+const previousSibling = ulElement.previousSibling;
+console.log(previousSibling);
+//previous sibling element
+const previousElementSibling = ulElement.previousElementSibling;
+console.log(previousElementSibling);
+//create element
+const newElement = document.createElement("div");
+newElement.setAttribute("class", "custom-class");
+console.log(newElement);
+//set attribute
+const mainHeader = document.getElementById("main-header");
+mainHeader.setAttribute("id", "new-id");
+//create text node and append child
+const textNode = document.createTextNode("New Text Node");
+mainDiv.appendChild(textNode);
+//create child
+const newChild = document.createElement("div");
+newChild.textContent = "New Child Element";
+parentElement.appendChild(newChild);
+
+// hello world before header
+const helloTextNode = document.createTextNode("Hello, World");
+headerTitle.parentNode.insertBefore(helloTextNode, headerTitle);
+// hello before item 1
+const firstListItem = document.querySelector("#items li");
+firstListItem.parentNode.insertBefore(helloTextNode, firstListItem);
+
 
 
