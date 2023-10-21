@@ -45,55 +45,111 @@
 // }
 
 // DOM manipulation Task 7
+
 // parent element
-const headerTitle = document.getElementById("header-title");
-const parentElement = headerTitle.parentElement;
-console.log(parentElement);
-// last child element
-const mainDiv = document.getElementById("main");
-const lastElementChild = mainDiv.lastElementChild;
-console.log(lastElementChild);
-// lastchild
-const lastChild = mainDiv.lastChild;
-console.log(lastChild);
-// first element child
-const firstElementChild = mainDiv.firstElementChild;
-console.log(firstElementChild);
-// nextsibling
-const formElement = document.querySelector("form");
-const nextSibling = formElement.nextSibling;
-console.log(nextSibling);
-// nextsibling element
-const nextElementSibling = formElement.nextElementSibling;
-console.log(nextElementSibling);
-//previous sibling 
-const ulElement = document.getElementById("items");
-const previousSibling = ulElement.previousSibling;
-console.log(previousSibling);
-//previous sibling element
-const previousElementSibling = ulElement.previousElementSibling;
-console.log(previousElementSibling);
-//create element
-const newElement = document.createElement("div");
-newElement.setAttribute("class", "custom-class");
-console.log(newElement);
-//set attribute
-const mainHeader = document.getElementById("main-header");
-mainHeader.setAttribute("id", "new-id");
-//create text node and append child
-const textNode = document.createTextNode("New Text Node");
-mainDiv.appendChild(textNode);
-//create child
-const newChild = document.createElement("div");
-newChild.textContent = "New Child Element";
-parentElement.appendChild(newChild);
+// const headerTitle = document.getElementById("header-title");
+// const parentElement = headerTitle.parentElement;
+// console.log(parentElement);
+// // last child element
+// const mainDiv = document.getElementById("main");
+// const lastElementChild = mainDiv.lastElementChild;
+// console.log(lastElementChild);
+// // lastchild
+// const lastChild = mainDiv.lastChild;
+// console.log(lastChild);
+// // first element child
+// const firstElementChild = mainDiv.firstElementChild;
+// console.log(firstElementChild);
+// // nextsibling
+// const formElement = document.querySelector("form");
+// const nextSibling = formElement.nextSibling;
+// console.log(nextSibling);
+// // nextsibling element
+// const nextElementSibling = formElement.nextElementSibling;
+// console.log(nextElementSibling);
+// //previous sibling 
+// const ulElement = document.getElementById("items");
+// const previousSibling = ulElement.previousSibling;
+// console.log(previousSibling);
+// //previous sibling element
+// const previousElementSibling = ulElement.previousElementSibling;
+// console.log(previousElementSibling);
+// //create element
+// const newElement = document.createElement("div");
+// newElement.setAttribute("class", "custom-class");
+// console.log(newElement);
+// //set attribute
+// const mainHeader = document.getElementById("main-header");
+// mainHeader.setAttribute("id", "new-id");
+// //create text node and append child
+// const textNode = document.createTextNode("New Text Node");
+// mainDiv.appendChild(textNode);
+// //create child
+// const newChild = document.createElement("div");
+// newChild.textContent = "New Child Element";
+// parentElement.appendChild(newChild);
 
-// hello world before header
-const helloTextNode = document.createTextNode("Hello, World");
-headerTitle.parentNode.insertBefore(helloTextNode, headerTitle);
-// hello before item 1
-const firstListItem = document.querySelector("#items li");
-firstListItem.parentNode.insertBefore(helloTextNode, firstListItem);
+// // hello world before header
+// const helloTextNode = document.createTextNode("Hello, World");
+// headerTitle.parentNode.insertBefore(helloTextNode, headerTitle);
+// // hello before item 1
+// const firstListItem = document.querySelector("#items li");
+// firstListItem.parentNode.insertBefore(helloTextNode, firstListItem);
+
+// DOM manipulation task 8
+
+var form = document.getElementById('addForm');
+var itemList = document.getElementById('items');
+
+// Form submit event
+form.addEventListener('submit', addItem);
+// Delete event
+itemList.addEventListener('click', removeItem);
 
 
+// Add item
+function addItem(e){
+    e.preventDefault();
+  
+    // Get input value
+    var newItem = document.getElementById('item').value;
+  
+    // Create new li element
+    var li = document.createElement('li');
+    // Add class
+    li.className = 'list-group-item';
+    // Add text node with input value
+    li.appendChild(document.createTextNode(newItem));
+  
+    // Create del button element
+    var deleteBtn = document.createElement('button');
+    var editbtn = document.createElement('button');
+  
+    // Add classes to del button
+    deleteBtn.className = 'btn btn-danger btn-sm float-right delete';
+    editbtn.className = "btn btn-primary btn-sm float-right edit";
+  
+    // Append text node
+    deleteBtn.appendChild(document.createTextNode('X'));
+    editbtn.appendChild(document.createTextNode("Edit"));
+  
+    // Append button to li
+    li.appendChild(editbtn);
+    li.appendChild(deleteBtn);
+    
+  
+    // Append li to list
+    itemList.appendChild(li);
+  }
+  
+  // Remove item
+  function removeItem(e){
+    if(e.target.classList.contains('delete')){
+      if(confirm('Are You Sure?')){
+        var li = e.target.parentElement;
+        itemList.removeChild(li);
+      }
+    }
+  }
+  
 
