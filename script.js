@@ -24,11 +24,23 @@ for (let i = 0; i < itemCount; i++) {
     item_list[i].style.fontWeight = "bold";
     item_list[i].style.color = "Orange"
 }
-item_list[2].style.backgroundColor = "green";
+item_list[2].style.backgroundColor = "lightgreen";
 
 // DOM manipulation Task 5
 
 // <li class="list-group-item">Item 5</li> (Edit by class name)
 
-item_list[4].style.color="black";
+// item_list[4].style.color="black";
 item_list[4].style.backgroundColor="burlywood";
+
+//DOM manipulation Task 6
+
+//  item_list[1].style.backgroundColor = "lightgreen";
+//  item_list[2].style.display="none";
+
+const odd = document.querySelectorAll("li:nth-child(odd)");
+
+for(let i=0; i<odd.length; i++) {
+    odd[i].style.backgroundColor = "#f4f4f4";
+}
+
