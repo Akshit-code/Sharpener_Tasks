@@ -3,9 +3,11 @@ body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-#css-section {
-    background-color: burlywood;
+#css-section, button {
     width: fit-content;
-    font-size: medium;
     font-weight: bold;
+}
+
+.css-text, button{
+    background-color: burlywood;
 }
