@@ -186,7 +186,7 @@
   
 // }
 
-// DOM manipulation task code 11 
+// DOM manipulation task code 11 and 12
 document.getElementById("btn").addEventListener("click", function() {
   add_user();
 })
@@ -210,7 +210,32 @@ function display_user(user) {
   const text = document.createTextNode(userText);
   const li = document.createElement("li");
   li.appendChild(text);
-  document.getElementById("user_list").appendChild(li);
+  const del_btn = document.createElement("button");
+  del_btn.innerText = "Delete";
+  del_btn.addEventListener("click", delete_user);
+  document.getElementById("user_list").appendChild(li).appendChild(del_btn);
+  
+}
+
+// DOM manipulation task code 12
+
+function delete_user() {
+  const userListItem = this.parentNode; // Get the <li> element containing the user details
+
+  // Remove the list item from the screen
+  const user_list = document.getElementById("user_list");
+  user_list.removeChild(userListItem);
+
+  const userText = userListItem.textContent; // Get the user details as text
+
+  // Remove the user from local storage
+  let existingUsers = JSON.parse(localStorage.getItem("user")) || [];
+  const userIndex = existingUsers.findIndex(user => JSON.stringify(user) === userText);
+
+  if (userIndex !== -1) {
+    existingUsers.splice(userIndex, 1);
+    localStorage.setItem("user", JSON.stringify(existingUsers));
+  }
 }
 
 
