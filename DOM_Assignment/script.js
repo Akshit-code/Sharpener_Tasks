@@ -175,10 +175,17 @@
 //     });
 //   }
 
-function addUser() {  
-  localStorage.setItem("name", document.getElementById("name").value);
-  localStorage.setItem("email", document.getElementById("email").value);
-}
+// DOM mainpulation task code 10 
 
+function addUser() {  
+  const user = {
+    name: document.getElementById("name").value,
+    email:document.getElementById("email").value
+  }
+  let user_obj = JSON.stringify(user);
+  localStorage.setItem("user", user_obj);
+
+  let user_obj_deserialzed = JSON.parse(localStorage.getItem(user_obj));
+}
   
 
