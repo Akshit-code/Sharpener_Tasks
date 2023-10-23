@@ -96,7 +96,7 @@
 // const firstListItem = document.querySelector("#items li");
 // firstListItem.parentNode.insertBefore(helloTextNode, firstListItem);
 
-// DOM manipulation task 8
+// DOM manipulation task 8 and 9
 
 var form = document.getElementById('addForm');
 var itemList = document.getElementById('items');
