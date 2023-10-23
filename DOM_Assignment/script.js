@@ -177,15 +177,41 @@
 
 // DOM mainpulation task code 10 
 
-function addUser() {  
-  const user = {
-    name: document.getElementById("name").value,
-    email:document.getElementById("email").value
-  }
-  let user_obj = JSON.stringify(user);
-  localStorage.setItem("user", user_obj);
-
-  let user_obj_deserialzed = JSON.parse(localStorage.getItem(user_obj));
-}
+// function addUser() {  
+//   const user = {
+//     name: document.getElementById("name").value,
+//     email:document.getElementById("email").value
+//   }
+//   let user_obj = JSON.stringify(user);
   
+// }
+
+// DOM manipulation task code 11 
+document.getElementById("btn").addEventListener("click", function() {
+  add_user();
+})
+
+function add_user() {
+  const user = {
+    name: document.getElementById("user_name").value,
+    email:document.getElementById("email").value,
+    phone_no: document.getElementById("phone_no").value
+  }
+  display_user(user);
+  let user_obj = JSON.stringify(user);
+
+  let existingUsers = JSON.parse(localStorage.getItem("user")) || [];
+  existingUsers.push(user_obj);
+  localStorage.setItem("user", JSON.stringify(existingUsers));
+}
+
+function display_user(user) {
+  const userText = `Name: ${user.name}, Email: ${user.email}, Phone: ${user.phone_no}`;
+  const text = document.createTextNode(userText);
+  const li = document.createElement("li");
+  li.appendChild(text);
+  document.getElementById("user_list").appendChild(li);
+}
+
+
 
