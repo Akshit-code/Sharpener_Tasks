@@ -1,0 +1,33 @@
+body, div {
+    background-color: lightgray;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+p {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+h1 {
+    text-align: center;
+}
+
+input{
+    display: block;
+    background-color: burlywood;
+}
+
+select {
+    display: block;
+    background-color: burlywood;
+}
+
+section {
+    width: fit-content;
+    margin: 0 auto;
+}
+
+button {
+    background-color: burlywood;
+    margin-top: 10px;
+}
+

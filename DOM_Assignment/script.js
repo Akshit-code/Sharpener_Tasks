@@ -197,9 +197,9 @@ function add_user() {
     email:document.getElementById("email").value,
     phone_no: document.getElementById("phone_no").value
   }
+  
   display_user(user);
   let user_obj = JSON.stringify(user);
-
   let existingUsers = JSON.parse(localStorage.getItem("user")) || [];
   existingUsers.push(user_obj);
   localStorage.setItem("user", JSON.stringify(existingUsers));
@@ -210,11 +210,20 @@ function display_user(user) {
   const text = document.createTextNode(userText);
   const li = document.createElement("li");
   li.appendChild(text);
+
   const del_btn = document.createElement("button");
   del_btn.innerText = "Delete";
   del_btn.addEventListener("click", delete_user);
-  document.getElementById("user_list").appendChild(li).appendChild(del_btn);
-  
+
+  const edit_btn = document.createElement("button");
+  edit_btn.innerText = "Edit";
+  edit_btn.addEventListener("click", edit_user);
+
+  li.appendChild(del_btn);
+  li.appendChild(edit_btn);
+  document.getElementById("user_list").appendChild(li);
+
+
 }
 
 // DOM manipulation task code 12
@@ -238,5 +247,60 @@ function delete_user() {
   }
 }
 
+function edit_user() {
+  const userListItem = this.parentNode; // Get the <li> element containing the user details
+
+  const userText = userListItem.textContent; // Get the user details as text
+  const user = JSON.parse(userText);
+
+  // Populate the input fields with the user data for editing
+  document.getElementById("user_name").value = user.name;
+  document.getElementById("email").value = user.email;
+  document.getElementById("phone_no").value = user.phone_no;
+
+  // Remove the list item from the screen
+  const user_list = document.getElementById("user_list");
+  user_list.removeChild(userListItem);
+
+  // Remove the user from local storage
+  let existingUsers = JSON.parse(localStorage.getItem("user")) || [];
+  const userIndex = existingUsers.findIndex(u => JSON.stringify(u) === userText);
+
+  if (userIndex !== -1) {
+    existingUsers.splice(userIndex, 1);
+    localStorage.setItem("user", JSON.stringify(existingUsers));
+  }
+
+  // Change the button to "Update" to allow the user to submit the edited details
+  const submitButton = document.getElementById("btn");
+  submitButton.innerText = "Update";
+  submitButton.removeEventListener("click", add_user); // Remove the "Add" event listener
+  submitButton.addEventListener("click", update_user); // Add the "Update" event listener
+}
+
+function update_user() {
+  const user = {
+    name: document.getElementById("user_name").value,
+    email: document.getElementById("email").value,
+    phone_no: document.getElementById("phone_no").value
+  };
+
+  display_user(user);
+  let user_obj = JSON.stringify(user);
+  let existingUsers = JSON.parse(localStorage.getItem("user")) || [];
+  existingUsers.push(user_obj);
+  localStorage.setItem("user", JSON.stringify(existingUsers));
+
+  // Restore the button to "Submit" for adding new users
+  const submitButton = document.getElementById("btn");
+  submitButton.innerText = "Submit";
+  submitButton.removeEventListener("click", update_user); // Remove the "Update" event listener
+  submitButton.addEventListener("click", add_user); // Add the "Add" event listener
+
+  // Clear the input fields
+  document.getElementById("user_name").value = "";
+  document.getElementById("email").value = "";
+  document.getElementById("phone_no").value = "";
+}
 
 
