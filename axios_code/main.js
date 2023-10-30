@@ -23,7 +23,7 @@ function addTodo() {
     completed: false
   })
   .then(res => showOutput(res))
-  .catch( err => console.error(err))
+  .catch(err => console.error(err))
   console.log('POST Request');
 }
 
