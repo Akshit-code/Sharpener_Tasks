@@ -44,8 +44,6 @@ document.querySelector("form").addEventListener("submit", function(e) {
   add_user(user);
 });
 
-//document.getElementById("btn-form").addEventListener("click", add_user);
-
 function display_users(user) {
   const delete_id = user.unique_id;
 	const new_text = ` First Name: ${user.first_name},
@@ -94,7 +92,6 @@ function display_users(user) {
 		del.remove();
 	});
 
-	// Clear the input fields
 	input1.value = "";
 	input2.value = "";
 	input3.value = "";
