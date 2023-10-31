@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1> Place your Order </h1>
+
+    <main>
+        <section id="order_form">
+            <form>
+                <fieldset>
+                    <p>Enter Dish</p>
+                    <label for="dish">  <input type="text" placeholder="Pizza" id ="dish" required> </label>
+                    <p>Price</p>
+                    <label for="price"> <input type="number" id="price" min="100" max="1000" required> </label>
+                    <p>Table No</p>
+                    <label for="table_1"> <input type="radio" name="table" value="table_1" id="table_1" > Table No 1 </label>
+                    <label for="table_2"> <input type="radio" name="table" value="table_2" id="table_2" > Table No 2 </label>
+                    <label for="table_3"> <input type="radio" name="table" value="table_3" id="table_3" > Table No 3 </label>
+                    <label for="btn-form"> 
+                    <button type="submit" id="btn-form" value="Submit" disabled> Submit</button></label>
+                </fieldset>
+            </form>
+        </section>
+        <section id="display_order">
+    </main>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.min.js"></script>
+    <script src = "script.js"></script>
+</body>
+</html>
