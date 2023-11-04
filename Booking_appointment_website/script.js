@@ -1,4 +1,5 @@
 // Form validation
+let is_editing = false;
 const submit_btn = document.getElementById("btn-form");
 let input1 = document.getElementById("first-name");
 let input2 = document.getElementById("second-name");
@@ -22,7 +23,9 @@ genderInputs.forEach((input) => {
 
 
 function validateForm() {
-	if ( (input1.value.trim() !=='')  && (input2.value.trim() !=='') 
+  if(is_editing) {
+    submit_btn.disabled = true;
+  } else if ( (input1.value.trim() !=='')  && (input2.value.trim() !=='') 
     && (input3.value.trim() !=='') &&  (input5.value.trim() !=='') && input4) {
 		submit_btn.disabled = false;
 	} else {
@@ -46,6 +49,8 @@ document.querySelector("form").addEventListener("submit", function(e) {
 
 function display_users(user) {
   const delete_id = user.unique_id;
+  const edit_id = user.unique_id;
+
 	const new_text = ` First Name: ${user.first_name},
     Second Name: ${user.second_name},
     Email: ${user.email},
@@ -67,25 +72,33 @@ function display_users(user) {
 	edit.classList.add("edit-button");
 	del.classList.add("delete-button");
 
+  let btn_update;
 	edit.addEventListener("click", function() {
+    is_editing = true;
     input1.value = user.first_name;
 	  input2.value = user.second_name;
 	  input3.value = user.email;
-    input4.value = user.gender;
+    input4 = document.querySelector('input[name="gender"]:checked');
 	  input5.value = user.age;
-    delete_user(delete_id);
 		p.remove();
 		edit.remove();
 		del.remove();
+    submit_btn.disabled = true;
+    btn_update = document.createElement("button");
+    btn_update.textContent = "Update";
+    document.getElementById("form_fieldset").appendChild(btn_update);
+    btn_update.addEventListener("click", function() {
+      user.first_name = input1.value;
+      user.second_name = input2.value;
+      user.email = input3.value;
+      user.gender = input4.value;
+      user.age = input5.value;
+      edit_user(user, edit_id);
+      btn_update.remove();
+    });
 	});
 
 	del.addEventListener("click", function() {
-    console.log("First Name: " + user.first_name );
-	  console.log("Second Name: " + user.second_name );
-	  console.log("Email: " + user.email );
-	  console.log("Gender: " + user.gender);
-	  console.log("Age: " + user.age );
-    console.log("IN del Listenter unique_id: " + user.unique_id );
     delete_user(delete_id);
 		p.remove();
 		edit.remove();
@@ -95,12 +108,11 @@ function display_users(user) {
 	input1.value = "";
 	input2.value = "";
 	input3.value = "";
-  input4.value = "";
 	input5.value = "";
 }
 
 function add_user(user) {
-    axios.post('https://crudcrud.com/api/ec0884275ca64d50ba46ddcf1c14adcfuser', {
+    axios.post('https://crudcrud.com/api/1f079d20a2a44432b826d8e76bd5c200/user', {
         first_name : user.first_name,
         second_name : user.second_name,
         email : user.email,
@@ -111,7 +123,6 @@ function add_user(user) {
       .then(res =>  {
         showOutput(res);
         user.unique_id = res.data._id;
-        console.log(`Added User (ID: ${user.unique_id})`);
         display_users(user);
       })
     .catch(err => console.error(err))
@@ -119,7 +130,7 @@ function add_user(user) {
 }
 
 function delete_user(delete_id) {
-  axios.delete(`https://crudcrud.com/api/ec0884275ca64d50ba46ddcf1c14adcf/${delete_id}`)
+  axios.delete(`https://crudcrud.com/api/1f079d20a2a44432b826d8e76bd5c200/user/${delete_id}`)
   .then(res => showOutput(res))
   .catch( err => console.error(err))
   console.log('DELETE Request');
@@ -127,20 +138,33 @@ function delete_user(delete_id) {
 
 window.addEventListener('load', constUI);
 function constUI() {
-  axios.get('https://crudcrud.com/api/794a7a5588da4fc69e0e33de20462ec2/user')
+  axios.get('https://crudcrud.com/api/1f079d20a2a44432b826d8e76bd5c200/user')
     .then (res => {
       const users_data = res.data;
       users_data.forEach(users_data => {
         users_data.unique_id = users_data._id;
         display_users(users_data);
-        console.log("In constUI : " + users_data.unique_id);
       })
-      console.log(users_data)
       showOutput(res)
     })
     .catch(err => console.error(err));
   console.log('Refreshed UI');
 }
+
+function edit_user(user, edit_id) {
+  axios.put(`https://crudcrud.com/api/1f079d20a2a44432b826d8e76bd5c200/user/${edit_id}`, {
+    first_name : user.first_name,
+    second_name : user.second_name,
+    email : user.email,
+    gender : user.gender,
+    age : user.age
+  })
+  .then( ()=> {
+    display_users(user);
+  })
+  .catch(err => console.error(err));
+}
+
 function showOutput(res) {
   document.getElementById('res').innerHTML = `
   <div class="card card-body mb-4">

@@ -30,6 +30,7 @@ input {
 fieldset {
     margin: 0 auto;
     width: fit-content;
+    background-color: antiquewhite;
 }
 
 #btn-form {
@@ -40,6 +41,16 @@ fieldset {
 #display_user {
     text-align: center;
     display: block;
+    background-color: antiquewhite;
+    width: fit-content;
+    margin: 0 auto;
+}
+
+
+#res {
+    background-color: antiquewhite;
+    width: fit-content;
+    margin: 0 auto;
 }
 
 .edit-button {
