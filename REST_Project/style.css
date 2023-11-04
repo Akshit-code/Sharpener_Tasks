@@ -28,6 +28,7 @@ input {
 }
 
 fieldset {
+    background-color: antiquewhite;
     margin: 0 auto;
     width: fit-content;
 }
