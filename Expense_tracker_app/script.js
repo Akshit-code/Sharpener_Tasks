@@ -1,21 +1,37 @@
-const input = {
-    amount: document.getElementById("amount"),
-    desc : document.getElementById("desc"),
-    category: document.getElementById("category")
-}
+let is_editing = false;
+const input1 = document.getElementById("amount");
+const input2 = document.getElementById("desc");
+const input3 = document.getElementById("category");
+const submit_btn = document.getElementById("btn_submit");
 
-document.getElementById("btn_submit").addEventListener("click", function(e) {
+// Add event listeners to input fields
+input1.addEventListener("input", validate_form);
+input2.addEventListener("input", validate_form);
+input3.addEventListener("change", validate_form);
+
+document.getElementById("btn_submit").addEventListener("click", function (e) {
     e.preventDefault();
     const expense = {
-        amount: input.amount.value,
-        desc: input.desc.value,
-        category: input.category.value,
-    }
-    console.log("Its working");
+        amount: input1.value,
+        desc: input2.value,
+        category: input3.value,
+        unique_id: null
+    };
+    
     add_expenses(expense);
     display_expense(expense);
-    console.log(expense);
-})
+});
+
+function validate_form() {
+    if (input1.value.trim() !== '' && input2.value.trim() !== '' && input3.value !== '0' && is_editing == false) {
+        submit_btn.disabled = false;
+    } else {
+        submit_btn.disabled = true;
+    }
+}
+
+// Initial validation
+validate_form();
 
 function display_expense(expense) {
     let exp_unique_id = expense.unique_id;
@@ -37,18 +53,36 @@ function display_expense(expense) {
     p.appendChild(edit_btn);
     p.appendChild(del_btn);
 
+    let update_btn;
+
     edit_btn.addEventListener("click", function() {
-        edit_expenses(expense);
+        is_editing = true;
+        submit_btn.disabled = true;
+        input1.value = expense.amount;
+        input2.value = expense.desc;
+        input3.value = expense.category;
         p.remove();
+        update_btn = document.createElement("button");
+        document.getElementById("form_fieldset").appendChild(update_btn);
+        update_btn.innerHTML = "Update";
+        update_btn.classList.add("btn", "btn-primary")
+        update_btn.addEventListener("click", function() {
+            expense.amount = input1.value;
+            expense.desc = input2.value;
+            expense.category = input3.value;
+            edit_expenses(expense, exp_unique_id);
+            update_btn.remove();
+        });
     } );
+
     del_btn.addEventListener("click", function() {
         delete_expenses(exp_unique_id);
         p.remove();
     });
 
-    input.amount.value = "";
-    input.desc.value = "";
-    input.category.value = "";
+    input1.value = "";
+    input2.value = "";
+    input3.value = "";
 }   
 
 function add_expenses(expense) {
@@ -66,11 +100,9 @@ function constUI() {
     }
 }
 
-function edit_expenses(expense) {
-    input.amount.value = expense.amount;
-    input.desc.value = expense.desc;
-    input.category.value = expense.category;
-    delete_expenses(expense.unique_id);
+function edit_expenses(expense, exp_unique_id) {
+    localStorage.setItem(exp_unique_id,JSON.stringify(expense) );
+    display_expense(expense);
 }
 
 function delete_expenses(exp_unique_id) {
