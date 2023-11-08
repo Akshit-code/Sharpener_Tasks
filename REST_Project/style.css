@@ -39,14 +39,23 @@ fieldset {
 }
 
 #display_order {
-    text-align: center;
-    display: block;
+    margin: 0 auto;
+    width: fit-content;
 }
 
 .edit-button {
-    margin: 0 auto;
+    margin-left: 2%;
+    margin-right: 2%;
+    display: inline;
 }
 
 .delete-button {
+    margin-left: 2%;
+    margin-right: 2%;
     display: inline;
+}
+
+h2 {
+    display:inline-table;
+    margin: 10px;
 }

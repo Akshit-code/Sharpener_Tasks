@@ -56,7 +56,20 @@ function display_order(order) {
 
 	const edit = document.createElement("button");
 	const del = document.createElement("button");
-	const x = document.getElementById("display_order");
+	const table_1 = document.getElementById("table_1_orders");
+  const table_2 = document.getElementById("table_2_orders");
+  const table_3 = document.getElementById("table_3_orders");
+  let x = () => {
+    if(order.table_no == 'table_1') {
+      x = table_1;
+    } else if (order.table_no == 'table_2') {
+      x = table_2;
+    } else {
+      x = table_3;
+    }
+    return x;
+  }
+  x = x();
 	x.appendChild(p);
 	x.appendChild(edit);
 	x.appendChild(del);
@@ -105,51 +118,78 @@ function display_order(order) {
 }
 
 // Adding orders
-function add_order(order) {
-    axios.post("https://crudcrud.com/api/d32584a9fa374b3d83b6ccd9d9a5fed3/orders", {
-        dish : order.dish,
-        price : order.price,
-        table_no : order.table_no,
-        unique_id: null
-    })
-      .then(res =>  {
-        order.unique_id = res.data._id;
-        display_order(order);
-      })
-    .catch(err => console.error(err))
+async function add_order(order) {
+  try {
+    const response = await axios.post("https://crudcrud.com/api/8bacb48224ba4531ad9c96798d80744b/orders", {
+      dish: order.dish,
+      price: order.price,
+      table_no: order.table_no,
+      unique_id: null,
+    });
+    order.unique_id = response.data._id;
+    display_order(order);
+    console.log("Added order");
+  } catch (error) {
+    console.error(error);
+  }
 }
 
 // Delete Order
-function delete_order(delete_id) {
-  axios.delete(`https://crudcrud.com/api/d32584a9fa374b3d83b6ccd9d9a5fed3/orders/${delete_id}`)
-  .catch( err => console.error(err))
+async function delete_order(delete_id) {
+  try {
+    await axios.delete(`https://crudcrud.com/api/8bacb48224ba4531ad9c96798d80744b/orders/${delete_id}`);
+    console.log("Deleted Order")
+  } catch (error) {
+    console.error(error);
+  }
 }
 
 // Edit orders
-function edit_order(order, edit_id) {
-    console.log(order.unique_id == edit_id);
-    axios.put(`https://crudcrud.com/api/d32584a9fa374b3d83b6ccd9d9a5fed3/orders/${edit_id}`, {
+async function edit_order(order, edit_id) {
+  try {
+    const response = await axios.put(`https://crudcrud.com/api/8bacb48224ba4531ad9c96798d80744b/orders/${edit_id}`, {
       dish: order.dish,
       price: order.price,
-      table_no: order.table_no
-    })
-    .then( ()=> {
-        display_order(order);
-        console.log("Order updated sucessfully");
-      } ) 
-      .catch(err=> console.error(err));
+      table_no: order.table_no,
+    });
+    display_order(order);
+    console.log("Order updated successfully");
+  } catch (error) {
+    console.error(error);
+  }
 }
 
 // Const UI
-window.addEventListener('load', constUI);
-function constUI() {
-  axios.get('https://crudcrud.com/api/d32584a9fa374b3d83b6ccd9d9a5fed3/orders')
-    .then (res => {
-        const orders_data = res.data;
-        orders_data.forEach(orders_data => {
-        orders_data.unique_id = orders_data._id;
-        display_order(orders_data);
-      })
-    })
-    .catch(err => console.error(err));
+async function constUI() {
+  try {
+    const response = await axios.get('https://crudcrud.com/api/8bacb48224ba4531ad9c96798d80744b/orders');
+    const orders_data = response.data;
+    orders_data.forEach((orders_data) => {
+      orders_data.unique_id = orders_data._id;
+      display_order(orders_data);
+    });
+    console.log("UI Refreshed");
+  } catch (error) {
+    console.error(error);
+  }
 }
+window.addEventListener('load', constUI);
+
+// retrieve data
+
+async function retrieve_data() {
+  const retrieve_table_no = 'table_3';
+  try {
+    const response = await axios.get('https://crudcrud.com/api/8bacb48224ba4531ad9c96798d80744b/orders');
+    const orders_data = response.data;
+    orders_data.forEach((orders_data) => {
+      if(orders_data.table_no == retrieve_table_no) {
+        console.log("Retrieve data for " + retrieve_table_no);
+        console.log(orders_data);
+      }
+    });
+  } catch (error) {
+      console.log(error);
+  }
+}
+retrieve_data();
