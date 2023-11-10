@@ -59,17 +59,16 @@ function display_order(order) {
 	const table_1 = document.getElementById("table_1_orders");
   const table_2 = document.getElementById("table_2_orders");
   const table_3 = document.getElementById("table_3_orders");
-  let x = () => {
-    if(order.table_no == 'table_1') {
-      x = table_1;
-    } else if (order.table_no == 'table_2') {
-      x = table_2;
-    } else {
-      x = table_3;
-    }
-    return x;
+
+  let x; 
+  if(order.table_no == 'table_1') {
+    x = table_1;
+  } else if (order.table_no == 'table_2') {
+    x = table_2;
+  } else {
+    x = table_3;
   }
-  x = x();
+
 	x.appendChild(p);
 	x.appendChild(edit);
 	x.appendChild(del);
@@ -99,9 +98,8 @@ function display_order(order) {
 		    order.table_no = input3.value;
         edit_order(order, edit_id);
         btn_update.remove();
+        is_editing = false;
     });
-    
-    
 	});
 
   // Delete Functionality
@@ -115,12 +113,15 @@ function display_order(order) {
   // clear input fields
   input1.value = "";
   input2.value = "";
+  document.getElementById("table_1").checked = false;
+  document.getElementById("table_2").checked = false;
+  document.getElementById("table_3").checked = false;
 }
 
 // Adding orders
 async function add_order(order) {
   try {
-    const response = await axios.post("https://crudcrud.com/api/8bacb48224ba4531ad9c96798d80744b/orders", {
+    const response = await axios.post("https://crudcrud.com/api/46849402312b448191b0fa01590ce3b7/orders", {
       dish: order.dish,
       price: order.price,
       table_no: order.table_no,
@@ -137,7 +138,7 @@ async function add_order(order) {
 // Delete Order
 async function delete_order(delete_id) {
   try {
-    await axios.delete(`https://crudcrud.com/api/8bacb48224ba4531ad9c96798d80744b/orders/${delete_id}`);
+    await axios.delete(`https://crudcrud.com/api/46849402312b448191b0fa01590ce3b7/orders/${delete_id}`);
     console.log("Deleted Order")
   } catch (error) {
     console.error(error);
@@ -147,7 +148,7 @@ async function delete_order(delete_id) {
 // Edit orders
 async function edit_order(order, edit_id) {
   try {
-    const response = await axios.put(`https://crudcrud.com/api/8bacb48224ba4531ad9c96798d80744b/orders/${edit_id}`, {
+    const response = await axios.put(`https://crudcrud.com/api/46849402312b448191b0fa01590ce3b7/orders/${edit_id}`, {
       dish: order.dish,
       price: order.price,
       table_no: order.table_no,
@@ -162,7 +163,7 @@ async function edit_order(order, edit_id) {
 // Const UI
 async function constUI() {
   try {
-    const response = await axios.get('https://crudcrud.com/api/8bacb48224ba4531ad9c96798d80744b/orders');
+    const response = await axios.get('https://crudcrud.com/api/46849402312b448191b0fa01590ce3b7/orders');
     const orders_data = response.data;
     orders_data.forEach((orders_data) => {
       orders_data.unique_id = orders_data._id;
@@ -180,7 +181,7 @@ window.addEventListener('load', constUI);
 async function retrieve_data() {
   const retrieve_table_no = 'table_3';
   try {
-    const response = await axios.get('https://crudcrud.com/api/8bacb48224ba4531ad9c96798d80744b/orders');
+    const response = await axios.get('https://crudcrud.com/api/46849402312b448191b0fa01590ce3b7/orders');
     const orders_data = response.data;
     orders_data.forEach((orders_data) => {
       if(orders_data.table_no == retrieve_table_no) {
