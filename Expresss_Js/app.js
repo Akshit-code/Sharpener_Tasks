@@ -1,25 +1,17 @@
-const http = require('http');
 const express = require('express');
-const bodyParser = require('body-parser');
 const app = express();
+const body_parser = require('body-parser');
+const admin = require('./routes/admin');
+const shop = require('./routes/shop');
 
-app.use(bodyParser.urlencoded( {extended : false}));
-app.use('/add-product', (req, res, next) => {
-    console.log('In Product page!');
-    res.send(`<form action = "/product" method="POST"> 
-        <input type = "text" name = "title">
-        <button type ="submit" >Submit </button> 
-    </form>`)
-    res.send('<h1>At the product page!</h1>');
-} );
+app.use(express.json());
+app.use(body_parser.urlencoded({extended:true}));
 
-app.post("/product" , (req, res, next) => {
-    console.log(req.body);
-    res.redirect("/");
+app.use( "/api", admin);
+app.use(shop);
+app.use( (req, res, next) => {
+    res.status(404).send(`<h1> Error: 404 Page Not found <h1>`);
 });
-app.use("/", (req, res, next) => {
-    console.log('In another middleware!');
-    res.send('<h1>Hello from Express!</h1>');
-});
-const server = http.createServer(app);
-server.listen(3000);
+
+const port = process.env.PORT || 3000;
+app.listen( port, () => console.log(`Server running at port: ${port}`));
