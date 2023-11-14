@@ -1,8 +1,8 @@
+const path = require('path');
 const express = require('express');
 const router = express.Router();
+const productsController = require('../controllers/products');
 
-router.get("/" , (req, res, next) => {
-    res.send("Hello From Akshit Mandani");
-});
+router.get('/', productsController.getProduct);
 
 module.exports = router;

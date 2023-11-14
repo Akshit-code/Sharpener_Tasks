@@ -1,17 +1,21 @@
+const path = require('path');
 const express = require('express');
+const bodyParser = require('body-parser');
 const app = express();
-const body_parser = require('body-parser');
-const admin = require('./routes/admin');
-const shop = require('./routes/shop');
 
-app.use(express.json());
-app.use(body_parser.urlencoded({extended:true}));
+app.set('view engine', 'ejs');
+app.set('views', 'views');
 
-app.use( "/api", admin);
-app.use(shop);
-app.use( (req, res, next) => {
-    res.status(404).send(`<h1> Error: 404 Page Not found <h1>`);
-});
+const adminRoutes = require('./routes/admin');
+const shopRoutes = require('./routes/shop');
+const errorContoller = require('./controllers/error');
 
-const port = process.env.PORT || 3000;
-app.listen( port, () => console.log(`Server running at port: ${port}`));
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(express.static(path.join(__dirname, 'public')));
+
+app.use('/admin', adminRoutes);
+app.use(shopRoutes);
+
+app.use(errorContoller.getError404);
+
+app.listen(3000);
