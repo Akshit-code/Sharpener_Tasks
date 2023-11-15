@@ -11,6 +11,7 @@
             <p> <%= product.description %></p>
             <form action="/cart" method="POST">
                 <button class="btn" type="submit">Add to cart</button>
+                <input type="hidden" name="productID" value = '<%= product.id %>'> 
             </form>
         </main>
         <%- include('../includes/end.ejs') %>

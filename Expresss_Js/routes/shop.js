@@ -12,6 +12,8 @@ router.get('/products', shopController.getProducts);
 
 router.get('/cart', shopController.getCart);
 
+router.psot('/cart', shopController.postCart);
+
 router.get('/product:id');
 
 router.get('/orders', shopController.getOrders);
