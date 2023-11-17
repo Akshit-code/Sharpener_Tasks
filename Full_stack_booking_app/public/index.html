@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1> Book your slot </h1>
+
+    <main>
+        <section id="signup_form">
+            <form action="/add-booking" method="POST">
+                <fieldset id="form_fieldset">
+                    <p>First Name</p>
+                    <label for="first-name">  <input type="text" placeholder="First Name" id ="first-name" required> </label>
+                    <p>Second Name</p>
+                    <label for="second-name"> <input type="text" placeholder="Second Name" id="second-name" required></label>
+                    <p>Email</p>
+                    <label for="email"> <input type="email" placeholder="abcd@gmail.com" id="email" required></label>
+                    <p>Gender</p>
+                    <label for="gen-m"> <input type="radio" name="gender" value="male" id="gen-m" checked> Male </label>
+                    <label for="gen-f"> <input type="radio" name="gender" value="female" id="'gen-f"> Female</label>
+                    <p>Age</p>
+                    <label for="age"> <input type="number" id="age" min="18" max="100" required> </label>
+                    <label for="btn-form"> 
+                    <button type="submit" id="btn-form" value="Submit" disabled> Submit</button></label>
+                </fieldset>
+            </form>
+        </section>
+        <br>
+        <section id="display_user">
+
+        </section>
+    </main>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.min.js"></script>
+    <script src = "script.js"></script>
+</body>
+</html>
