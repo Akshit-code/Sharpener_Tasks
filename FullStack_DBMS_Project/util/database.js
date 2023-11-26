@@ -2,7 +2,7 @@ const {Sequelize} = require('sequelize');
 const sequelize = new Sequelize(
     'database_management_project',
     'root',
-    'Hidden Password',
+    '@K$#!t2019',
     {
         host:'localhost',
         dialect:'mysql',
