@@ -14,6 +14,9 @@ const email = document.getElementById("email");
 
 const loginDiv = document.getElementById("login-form-div");
 const loginBtn = document.getElementById("login-btn");
+const loginForm = document.getElementById("login-form");
+const loginEmail = document.getElementById('login-email');
+const loginPassword = document.getElementById("login-password");
 
 signUpBtn.addEventListener("click", () => {
     signUpDiv.style.display = "block";
@@ -62,32 +65,66 @@ signUpForm.addEventListener("submit" , (e)=> {
     e.preventDefault();
     const user = {
         firstName: firstName.value,
-        lastNaame: lastNaame.value,
+        lastName: lastNaame.value,
         email: email.value,
-        pasword: newPassword.value
+        password: newPassword.value
     }
     console.log(user);
     addUser(user);
 });
 
+loginForm.addEventListener("submit", (e)=> {
+    e.preventDefault();
+    const user = {
+        email : loginEmail.value,
+        password: loginPassword.value
+    };
+    loginUser(user);
+});
+
+async function loginUser(user)  {
+    try {
+        const response = await fetch(`http://localhost:3000/user`, {
+            method: 'POST',
+            headers:{
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify( {
+                email: user.email,
+                password: user.password,
+                requestType: 'login'
+            }),
+        });
+    } catch (error) {
+        console.log(error);
+    }
+}
 
 async function addUser(user)  {
-    const response = await fetch(`http://localhost:3000/user`, {
-        method: 'POST',
-        headers:{
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify( {
-            firstName : user.firstName,
-            lastName: user.lastName,
-            email: user.email,
-            password: user.password
-        }),
-    })
-    .then( res=>{
-        return res.json();
-    })
-    .then( data => {
-        console.log(data);
-    })
+    try {
+        const response = await fetch(`http://localhost:3000/user`, {
+            method: 'POST',
+            headers:{
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify( {
+                firstName : user.firstName,
+                lastName: user.lastName,
+                email: user.email,
+                password: user.password,
+                requestType: 'signUp'
+            }),
+        });
+
+        if(response.status == 201) {
+            console.log("New User Added");
+            signUpDiv.style.display = "none";
+            loginDiv.style.display = "block";
+        } else if (response.status == 200){
+            console.log("user Already exits");
+            alert("User with same email id already Exits !!!");
+        }
+    } catch (error) {
+        console.log(error);
+    }
 }
