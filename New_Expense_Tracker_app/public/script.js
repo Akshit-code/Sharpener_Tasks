@@ -84,7 +84,7 @@ loginForm.addEventListener("submit", (e)=> {
 
 async function loginUser(user)  {
     try {
-        const response = await fetch(`http://localhost:3000/user`, {
+        const response = await fetch(`http://localhost:3000/user/login`, {
             method: 'POST',
             headers:{
                 'Content-Type': 'application/json'
@@ -102,7 +102,7 @@ async function loginUser(user)  {
 
 async function addUser(user)  {
     try {
-        const response = await fetch(`http://localhost:3000/user`, {
+        const response = await fetch(`http://localhost:3000/user/register`, {
             method: 'POST',
             headers:{
                 'Content-Type': 'application/json'
