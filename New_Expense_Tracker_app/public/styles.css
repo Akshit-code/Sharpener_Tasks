@@ -286,3 +286,62 @@ color: black;
 text-decoration: none;
 cursor: pointer;
 }
+
+/*  Expense form -CSS */
+
+#expense-form-section {
+width: fit-content;
+margin: 0 auto;
+}
+
+#expense-form-section input{
+margin-top: 10%;
+margin-bottom: 5%;
+width: fit-content;
+}
+
+#expense-form-section span{
+margin-top: 10%;
+margin-bottom: 5%;
+width: fit-content;
+}
+
+#expense-form-section p {
+margin: 0%;
+}
+
+#expense-form-sectio button {
+margin-top: 5%;
+}
+
+.select-wrapper {
+display: flex;
+flex-direction: column;
+margin-bottom: 20px; /* Adjust margin as needed */
+}
+
+.select-wrapper label {
+font-weight: bold;
+margin-bottom: 5px;
+}
+
+.select-wrapper select {
+padding: 8px;
+border: 1px solid #ccc;
+border-radius: 4px;
+width: 100%;
+font-size: 16px;
+margin-top: 5%;
+/* Add other necessary styling */
+}
+
+/* To style the dropdown arrow */
+.select-wrapper select::-ms-expand {
+display: none;
+}
+
+.select-wrapper select:focus {
+outline: none;
+border-color: #007bff; /* Change color on focus if desired */
+box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Add a subtle shadow on focus */
+}
