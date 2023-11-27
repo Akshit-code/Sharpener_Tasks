@@ -6,7 +6,7 @@ const fs = require('fs');
 const cors = require('cors');
 const sequelize = require('./util/database');
 const routes = require('./routes/routes');
-const models = require('./models/model');
+const {User, Expense} = require('./models/model');
 
 app.use(cors());
 app.use(bodyParser.urlencoded( { extended:false }));
@@ -22,7 +22,6 @@ app.use("/user", routes );
 app.use("/", (req, res, next) => {
     res.sendFile(path.join(__dirname, 'views', 'index.html'));
 });
-
 
 sequelize.sync()
     .then( res => {

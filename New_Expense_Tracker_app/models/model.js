@@ -30,4 +30,19 @@ const User = sequelize.define('User', {
     }
 });
 
-module.exports = User;
+const Expense = sequelize.define('expenses', {
+    amount: {
+        type: DataTypes.INTEGER,
+        allowNull: false
+    }, 
+    desc: {
+        type: DataTypes.STRING,
+        allowNull:false
+    },
+    category: {
+        type: DataTypes.ENUM('Food', 'Rent', 'Travel', 'Bills'),
+        allowNull: false
+    },
+});
+
+module.exports = {User, Expense};

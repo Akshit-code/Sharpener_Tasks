@@ -70,7 +70,7 @@ signUpForm.addEventListener("submit" , (e)=> {
         password: newPassword.value
     }
     console.log(user);
-    addUser(user);
+    registerUser(user);
 });
 
 loginForm.addEventListener("submit", (e)=> {
@@ -82,25 +82,8 @@ loginForm.addEventListener("submit", (e)=> {
     loginUser(user);
 });
 
-async function loginUser(user)  {
-    try {
-        const response = await fetch(`http://localhost:3000/user/login`, {
-            method: 'POST',
-            headers:{
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify( {
-                email: user.email,
-                password: user.password,
-                requestType: 'login'
-            }),
-        });
-    } catch (error) {
-        console.log(error);
-    }
-}
 
-async function addUser(user)  {
+async function registerUser(user)  {
     try {
         const response = await fetch(`http://localhost:3000/user/register`, {
             method: 'POST',
@@ -128,3 +111,41 @@ async function addUser(user)  {
         console.log(error);
     }
 }
+async function loginUser(user) {
+    try {
+        const response = await fetch(`http://localhost:3000/user/login`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                email: user.email,
+                password: user.password,
+                requestType: 'login'
+            }),
+        });
+
+        if (response.status === 200) {
+            const data = await response.json();
+            // After redirecting, you might not need further code execution here
+        } else if (response.status === 401) {
+            const error = await response.json();
+            console.log(error);
+            alert("Incorrect Password");
+        } else if (response.status === 404) {
+            const error = await response.json();
+            console.log(error);
+            alert("No user Found");
+        }
+
+        // Code to execute after handling the response
+        loginDiv.style.display = "none";
+        const expenseForm = document.getElementById("expense-form-section");
+        expenseForm.style.display = "block";
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+
+

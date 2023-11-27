@@ -32,6 +32,8 @@ expenseForm.addEventListener('submit', function(e) {
 
 
 function displayExpense(expense) {
+    const x = document.getElementById("display-expenses");
+    x.style.display = 'block';
     const editID = expense.uniqueID;
     const deleteID = expense.uniqueID;
 
@@ -46,7 +48,7 @@ function displayExpense(expense) {
     const delBtn = document.createElement("button");
     editBtn.innerHTML = "Edit";
     delBtn.innerHTML = "Delete";
-    const x = document.getElementById("display-expenses");
+    
     x.appendChild(p);
     x.appendChild(editBtn);
     x.appendChild(delBtn);
@@ -137,7 +139,7 @@ async function editExpense(expense, editID) {
             body: JSON.stringify( {
                 amount: expense.amount,
                 desc: expense.desc,
-                categoty: expense.category
+                category: expense.category
             }),
         })
         .then(response => {
@@ -153,7 +155,7 @@ async function editExpense(expense, editID) {
     }
 }
 
-window.addEventListener('load', constUI);
+window.addEventListener('load', ()=> constUI());
 async function constUI() {
     try {
         const response = await fetch(`http://localhost:3000/homepage/refresh`);

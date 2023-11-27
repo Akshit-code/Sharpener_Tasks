@@ -2,8 +2,7 @@ const sequelize = require('../util/database');
 const {Sequelize, Datatypes} = require('sequelize');
 const queryInterface = sequelize.getQueryInterface();
 const bcrypt = require('bcrypt');
-const User = require('../models/model');
-const Expense = require('../models/model');
+const {User, Expense} = require('../models/model');
 
 exports.register = async (req, res, next) => {
     try {
@@ -40,7 +39,7 @@ exports.login = async (req, res, next) =>  {
                 return res.status(401).json({message: 'Incorrect Pasword'});
             }
             console.log("Login successful");
-            return res.status(200).json({ message: "Login successful" });
+            return res.status(200).json({ message: "Login successful"});
         } else {
             console.log("No user found");
             return res.status(404).json({ message: "User not found" });
