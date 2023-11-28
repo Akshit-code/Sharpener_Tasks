@@ -9,7 +9,7 @@ const signUpForm = document.getElementById("signup-form");
 const newPassword = document.getElementById("newPassword");
 const confirmPassword = document.getElementById("confirmPassword");
 const firstName = document.getElementById("firstName");
-const lastNaame = document.getElementById("lastName");
+const lastName = document.getElementById("lastName");
 const email = document.getElementById("email");
 
 const loginDiv = document.getElementById("login-form-div");
@@ -65,7 +65,7 @@ signUpForm.addEventListener("submit" , (e)=> {
     e.preventDefault();
     const user = {
         firstName: firstName.value,
-        lastName: lastNaame.value,
+        lastName: lastName.value,
         email: email.value,
         password: newPassword.value
     }
@@ -95,7 +95,6 @@ async function registerUser(user)  {
                 lastName: user.lastName,
                 email: user.email,
                 password: user.password,
-                requestType: 'signUp'
             }),
         });
 
@@ -111,6 +110,7 @@ async function registerUser(user)  {
         console.log(error);
     }
 }
+
 async function loginUser(user) {
     try {
         const response = await fetch(`http://localhost:3000/user/login`, {
@@ -121,13 +121,15 @@ async function loginUser(user) {
             body: JSON.stringify({
                 email: user.email,
                 password: user.password,
-                requestType: 'login'
             }),
         });
 
         if (response.status === 200) {
             const data = await response.json();
-            // After redirecting, you might not need further code execution here
+            localStorage.setItem('token', data.token);
+            loginDiv.style.display = "none";
+            const expenseForm = document.getElementById("expense-form-section");
+            expenseForm.style.display = "block";
         } else if (response.status === 401) {
             const error = await response.json();
             console.log(error);
@@ -137,11 +139,7 @@ async function loginUser(user) {
             console.log(error);
             alert("No user Found");
         }
-
-        // Code to execute after handling the response
-        loginDiv.style.display = "none";
-        const expenseForm = document.getElementById("expense-form-section");
-        expenseForm.style.display = "block";
+        
     } catch (error) {
         console.log(error);
     }

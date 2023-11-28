@@ -1,8 +1,12 @@
 const sequelize = require('../util/database');
 const {Sequelize, Datatypes} = require('sequelize');
 const queryInterface = sequelize.getQueryInterface();
+const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const {User, Expense} = require('../models/model');
+const dotenv = require('dotenv');
+const config = dotenv.config();
+const secretKey = process.env.SECRET_KEY;
 
 exports.register = async (req, res, next) => {
     try {
@@ -23,6 +27,7 @@ exports.register = async (req, res, next) => {
             return res.status(200).json(req.body);
         }
     } catch (error) {
+        console.error(error);
         res.status(500).json('Internal Server Error');
     }
 }
@@ -31,38 +36,41 @@ exports.login = async (req, res, next) =>  {
     try {
         req.body.id = req.body.email;
         const isExistingUser = await User.findByPk(req.body.email);
-
         if(isExistingUser) {
             const validPassword = await bcrypt.compare(req.body.password, isExistingUser.password);
             if(!validPassword) {
-                console.log("Incorrect Pasword");
-                return res.status(401).json({message: 'Incorrect Pasword'});
+                console.log("Incorrect Password");
+                return res.status(401).json({message: 'Incorrect Password'});
             }
-            console.log("Login successful");
-            return res.status(200).json({ message: "Login successful"});
+            const token = jwt.sign({ email: req.body.email }, secretKey);
+            return res.status(200).json({token});
         } else {
             console.log("No user found");
             return res.status(404).json({ message: "User not found" });
         }
     } catch (error) {
+        console.error(error);
         res.status(500).json('Internal Server Error');
     }
 }
 
 exports.addExpense = async (req, res, next) => {
     try {
+        console.log("from adExpenseController", req.body);
         const expense = await Expense.create ( {
             amount:req.body.amount,
             desc: req.body.desc,
-            category: req.body.category
+            category: req.body.category,
+            email: req.body.email
         } );
         const responseData = {
-            id: expense.id
+            id: expense.id,
+            // user: req.body.user
         }
         res.status(201).json(responseData);
         //res.redirect('/');
-    } catch (err) {
-        console.log(err);
+    } catch (error) {
+        console.error(error);
         res.status(500).send('Server Error');
     }
 };
@@ -75,8 +83,8 @@ exports.deleteExpense = async (req, res, next) => {
             return res.status(404).send("Expense not Found");
         }
         await expenseToDelete.destroy();
-    } catch (err) {
-        console.log(err);
+    } catch (error) {
+        console.error(error);
         res.status(500).send('Server Error');
     }
 };
@@ -94,7 +102,8 @@ exports.editExpense = async (req, res, next) => {
             category: req.body.category
         })
         res.status(201).json(expenseToEdit);
-    } catch (err) {
+    } catch (error) {
+        console.error(error);
         res.status(500).send("Server error");
     }
 };
@@ -103,7 +112,8 @@ exports.getAllExpenses = async (req, res, next) =>{
     try {
         const expenses = await Expense.findAll();
     res.json(expenses);
-    } catch (err) {
+    } catch (error) {
+        console.error(error);
         res.status(500).send("Server Error");
     }
 }

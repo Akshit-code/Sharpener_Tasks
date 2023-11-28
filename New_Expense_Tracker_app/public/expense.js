@@ -1,8 +1,10 @@
+
 const input1 = document.getElementById("amount");
 const input2 = document.getElementById("desc");
 const input3 = document.getElementById("category");
 const submitBtn = document.getElementById("form-btn");
 const expenseForm  = document.getElementById("expense-from");
+
 let isEditing = false;
 
 input1.addEventListener('input', validateForm);
@@ -92,10 +94,13 @@ function displayExpense(expense) {
 
 async function addExpense(expense) {
     try {
+        const token = localStorage.getItem('token');
+        console.log(token);
         const response = await fetch(`http://localhost:3000/homepage/add-expense`, {
             method:'POST',
             headers: {
                 'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
             },
             body: JSON.stringify( {
                 amount: expense.amount,
@@ -103,16 +108,12 @@ async function addExpense(expense) {
                 category: expense.category
             }),
         })
-        .then(response => {
-            return response.json();
-        })
-        .then( data => {
-            expense.uniqueID = data.id;
-            console.log("From then below output:");
-            console.log(expense);
-            console.log("User Added");
-            displayExpense(expense);
-        })
+        const data = await response.json();
+        expense.uniqueID = data.id;
+        expense.user = data.user;
+        console.log("Expense details after API call:");
+        console.log(expense);
+        displayExpense(expense);
     } catch (err) {
         console.log(err);
     }
@@ -120,10 +121,14 @@ async function addExpense(expense) {
 
 async function deleteExpense( deleteID ) {
     try {
+        const token = localStorage.getItem('token');
         const response = await fetch(`http://localhost:3000/homepage/delete-expense/${deleteID}`, {
             method: 'DELETE',
-        });
-        console.log('Deleted User');
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            }
+        })
     } catch(err) {
         console.log(err);
     }
@@ -131,10 +136,12 @@ async function deleteExpense( deleteID ) {
 
 async function editExpense(expense, editID) {
     try {
+        const token = localStorage.getItem('token');
         const response = fetch (`http://localhost:3000/homepage/edit-expense/${editID}`, {
             method:'PUT',
             headers: {
                 'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
             },
             body: JSON.stringify( {
                 amount: expense.amount,
@@ -155,10 +162,15 @@ async function editExpense(expense, editID) {
     }
 }
 
-window.addEventListener('load', ()=> constUI());
-async function constUI() {
+window.addEventListener('load', ()=> getExpenses());
+async function getExpenses() {
     try {
-        const response = await fetch(`http://localhost:3000/homepage/refresh`);
+        const token = localStorage.getItem('token');
+        const response = await fetch(`http://localhost:3000/homepage/getExpenses`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
         const expenseData = await response.json();
         console.log('***** From Const UI ********');
         console.log(expenseData);
@@ -167,14 +179,12 @@ async function constUI() {
                 amount: element.amount,
                 desc: element.desc,
                 category: element.category,
-                uniqueID: element.id
+                uniqueID: element.id,
+                user: element.user
             };
             displayExpense(expense);
         });
-        console.log("Refreshed UI");
     } catch (err) {
         console.log(err);
     }
 }   
-
-

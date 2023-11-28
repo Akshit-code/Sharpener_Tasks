@@ -22,7 +22,10 @@ const User = sequelize.define('User', {
     },
     email: {
         type:DataTypes.STRING,
-        allowNull:false
+        allowNull:false,
+        validate: {
+            isEmail:true
+        }
     },
     password: {
         type: DataTypes.STRING,
@@ -42,6 +45,13 @@ const Expense = sequelize.define('expenses', {
     category: {
         type: DataTypes.ENUM('Food', 'Rent', 'Travel', 'Bills'),
         allowNull: false
+    },
+    email: {
+        type:DataTypes.STRING,
+        allowNull:false,
+        validate: {
+            isEmail:true
+        }
     },
 });
 
