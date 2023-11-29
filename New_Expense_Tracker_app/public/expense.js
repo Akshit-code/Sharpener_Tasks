@@ -1,10 +1,9 @@
-
 const input1 = document.getElementById("amount");
 const input2 = document.getElementById("desc");
 const input3 = document.getElementById("category");
 const submitBtn = document.getElementById("form-btn");
 const expenseForm  = document.getElementById("expense-from");
-
+const displayExpensesDiv = document.getElementById("display-expenses");
 let isEditing = false;
 
 input1.addEventListener('input', validateForm);
@@ -29,15 +28,16 @@ expenseForm.addEventListener('submit', function(e) {
         category: input3.value
     }
     console.log(expense);
+    expenseFormDiv.style.display = "none";
+    expenseForm.style.display="none";
     addExpense(expense);
 });
 
 
 function displayExpense(expense) {
-    const x = document.getElementById("display-expenses");
-    x.style.display = 'block';
-    const editID = expense.uniqueID;
-    const deleteID = expense.uniqueID;
+    displayExpensesDiv.style.display = 'block';
+    const editID = expense.expensesId;
+    const deleteID = expense.expensesId ;
 
     const newText = `Amount: ${expense.amount},
         Description: ${expense.desc}, 
@@ -51,14 +51,16 @@ function displayExpense(expense) {
     editBtn.innerHTML = "Edit";
     delBtn.innerHTML = "Delete";
     
-    x.appendChild(p);
-    x.appendChild(editBtn);
-    x.appendChild(delBtn);
+    displayExpensesDiv.appendChild(p);
+    displayExpensesDiv.appendChild(editBtn);
+    displayExpensesDiv.appendChild(delBtn);
     editBtn.classList.add("edit-button");
 	delBtn.classList.add("delete-button");
     let updateBtn;
 
     editBtn.addEventListener("click", function() {
+        expenseFormDiv.style.display = "block";
+        expenseForm.style.display="block";
         isEditing = true;
         input1.value = expense.amount;
         input2.value = expense.desc;
@@ -77,6 +79,8 @@ function displayExpense(expense) {
             editExpense(expense, editID);
             updateBtn.remove();
             isEditing = false;
+            expenseFormDiv.style.display = "none";
+            expenseForm.style.display="none";
         });
     });
 
@@ -109,8 +113,9 @@ async function addExpense(expense) {
             }),
         })
         const data = await response.json();
-        expense.uniqueID = data.id;
-        expense.user = data.user;
+        console.log( "DATA: ",data);
+        expense.expensesId = data.expensesId;
+        expense.userId = data.userId;
         console.log("Expense details after API call:");
         console.log(expense);
         displayExpense(expense);
@@ -162,28 +167,40 @@ async function editExpense(expense, editID) {
     }
 }
 
-window.addEventListener('load', ()=> getExpenses());
+window.addEventListener('load', ()=> {
+    const token = localStorage.getItem('token');
+    if(!!token) {
+        getExpenses();
+    }
+});
+
 async function getExpenses() {
     try {
         const token = localStorage.getItem('token');
-        const response = await fetch(`http://localhost:3000/homepage/getExpenses`, {
+        const response = await fetch(`http://localhost:3000/homepage/get-expenses`, {
             headers: {
+                'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
             }
         });
-        const expenseData = await response.json();
+        
         console.log('***** From Const UI ********');
-        console.log(expenseData);
-        expenseData.forEach(element => {
-            const expense = {
-                amount: element.amount,
-                desc: element.desc,
-                category: element.category,
-                uniqueID: element.id,
-                user: element.user
-            };
-            displayExpense(expense);
-        });
+        if(response.status == 200) {
+            const expenseData = await response.json();
+            expenseData.forEach(element => {
+                const expense = {
+                    amount: element.amount,
+                    desc: element.desc,
+                    category: element.category, 
+                };
+                displayExpense(expense);
+            });
+        } else if(response.status == 204) {
+            console.log("No expenses found for the provided email");
+        } else {
+            console.error();
+        }
+        
     } catch (err) {
         console.log(err);
     }

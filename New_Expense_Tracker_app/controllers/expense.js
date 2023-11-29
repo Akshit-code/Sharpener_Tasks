@@ -1,0 +1,74 @@
+const sequelize = require('../util/database');
+const {Sequelize, Datatypes} = require('sequelize');
+const queryInterface = sequelize.getQueryInterface();
+const Expense = require('../models/expense');
+
+exports.addExpense = async (req, res, next) => {
+    try {
+        console.log("from addExpenseController", req.body);
+        const expense = await Expense.create ( {
+            amount:req.body.amount,
+            desc: req.body.desc,
+            category: req.body.category,
+            UserId: req.body.userId
+        } );
+        const responseData = {
+            expensesId: expense.id,
+            userId: expense.UserId
+        }
+        res.status(201).json(responseData);
+        //res.redirect('/');
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Server Error');
+    }
+};
+
+exports.deleteExpense = async (req, res, next) => {
+    try {
+        const deleteID = req.params.id;
+        const expenseToDelete = await Expense.findByPk(deleteID);
+        if(!deleteID) {
+            return res.status(404).send("Expense not Found");
+        }
+        await expenseToDelete.destroy();
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Server Error');
+    }
+};
+
+exports.editExpense = async (req, res, next) => {
+    try {
+        console.log("From Edit controller", req.body);
+        const editId = req.params.id;
+        const expenseToEdit = await Expense.findByPk(editId);
+        if (!expenseToEdit) {
+            return res.status(404).send("Expenses not found");
+        }
+        await expenseToEdit.update( {
+            amount:req.body.amount,
+            desc: req.body.desc,
+            category: req.body.category
+        })
+        res.status(201).json(expenseToEdit);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("Server error");
+    }
+};
+
+exports.getAllExpenses = async (req, res, next) =>{
+    console.log("From Get all Expenses: ", req.body);
+    try {
+        const expenses = await Expense.findAll({where: {UserId:req.body.userId}});
+        if (!expenses || expenses.length === 0) {
+            return res.status(204).json({ message: 'No expenses found for the provided email' });
+        }
+        console.log(expenses);
+        res.status(200).json(expenses);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("Server Error");
+    }
+}
