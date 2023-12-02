@@ -19,7 +19,6 @@ const loginBtn = document.getElementById("login-btn");
 const loginForm = document.getElementById("login-form");
 const loginEmail = document.getElementById('login-email');
 const loginPassword = document.getElementById("login-password");
-const expenseFormDiv = document.getElementById("expense-form-section");
 
 signUpBtn.addEventListener("click", () => {
     signUpDiv.style.display = "block";
@@ -125,7 +124,7 @@ async function loginUser(user) {
         const response = await fetch(`http://localhost:3000/user/login`, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
             },
             body: JSON.stringify({
                 email: user.email,
@@ -187,7 +186,7 @@ function toggleUI() {
         });
 
         buyPremiumBtn.addEventListener("click", ()=> {
-            console.log("Lele bhai , ");
+            buyPremiumFunction();
         });
 
         addExpensesBtn.addEventListener("click", ()=> {
@@ -197,5 +196,8 @@ function toggleUI() {
         });
     }
 }
+
+
+
 
 window.addEventListener("load", ()=> toggleUI());
