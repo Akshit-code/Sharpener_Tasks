@@ -4,6 +4,7 @@ const userController = require('../controllers/user');
 const expenseController = require('../controllers/expense');
 const authToken  = require('../middleware/authToken');
 const payment  = require('../controllers/payment');
+const premium = require('../controllers/premium');
 
 router.post("/register", userController.register);
 router.post("/login", userController.login);
@@ -16,4 +17,5 @@ router.get("/get-expenses", authToken.authToken, expenseController.getAllExpense
 router.get("/createOrder", authToken.authToken, payment.createOrder);
 router.post('/addOrder', authToken.authToken, payment.addOrder );
 
+router.get("/getLeaderBoardDetails" , premium.getLeaderBoardDetails );
 module.exports = router;

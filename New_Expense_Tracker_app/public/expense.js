@@ -192,6 +192,7 @@ async function getExpenses() {
                     amount: element.amount,
                     desc: element.desc,
                     category: element.category, 
+                    expensesId : element.id
                 };
                 displayExpense(expense);
             });

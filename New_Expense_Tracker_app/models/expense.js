@@ -8,7 +8,7 @@ const Expense = sequelize.define('expenses', {
         allowNull: false
     }, 
     desc: {
-        type: DataTypes.STRING,
+        type: DataTypes.STRING,  
         allowNull:false
     },
     category: {

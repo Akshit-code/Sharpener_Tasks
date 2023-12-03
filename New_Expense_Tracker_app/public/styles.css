@@ -91,18 +91,38 @@ border: 1px solid rgba(104, 85, 224, 1);
   display: none;
 }
 
+.topnav p {
+float: left;
+display: block;
+color: #f2f2f2;
+text-align: center;
+text-decoration: none;
+font-size: larger;
+font-weight: bold;
+margin-left: 2%;
+}
+
+.topnav p:hover {
+background-color: #ddd;
+color: black;
+cursor: pointer;
+}
+
 /* When the screen is less than 600 pixels wide, hide all links, except for the first one ("Home"). Show the link that contains should open and close the topnav (.icon) */
 @media screen and (max-width: 600px) {
 .topnav a {display: none;}
 .topnav a.icon {
-    float: right;
-    display: block;
+  float: right;
+  display: block;
 }
 .topnav-left a {
-    display: block;
+  display: block;
 }
 .topnav-right button {
-    display: none;
+  display: none;
+}
+.topnav p {
+  display: none;
 }
 }
 
@@ -119,12 +139,18 @@ border: 1px solid rgba(104, 85, 224, 1);
     display: block;
     text-align: left;
 }
+.topnav p {
+  float: none;
+  display: none;
+}
+
 .topnav.responsive .topnav-right button {
     display: block;
     float: left;
     padding: 1%;
     margin: 2%;
 }
+
 }
 
 /* Form -CSS */
@@ -364,4 +390,36 @@ display: none;
 outline: none;
 border-color: #007bff; /* Change color on focus if desired */
 box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Add a subtle shadow on focus */
+}
+
+
+
+.leaderboard {
+max-width: 600px;
+margin: 20px auto;
+background-color: #fff;
+border-radius: 8px;
+box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+padding: 20px;
+}
+
+.user {
+display: flex;
+justify-content: space-between;
+align-items: center;
+margin-bottom: 10px;
+padding: 10px;
+border-bottom: 1px solid #ccc;
+}
+
+.user:nth-child(even) {
+background-color: #f9f9f9;
+}
+
+.user .name {
+font-weight: bold;
+}
+
+.user .expense {
+font-size: 16px;
 }
