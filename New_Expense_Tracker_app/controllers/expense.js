@@ -16,6 +16,7 @@ exports.addExpense = async (req, res, next) => {
             expensesId: expense.id,
             userId: expense.UserId
         }
+        
         res.status(201).json(responseData);
         //res.redirect('/');
     } catch (error) {
