@@ -30,29 +30,12 @@ const User = sequelize.define('User', {
     password: {
         type: DataTypes.STRING,
         allowNull:false
-    }
-});
-
-const Expense = sequelize.define('expenses', {
-    amount: {
-        type: DataTypes.INTEGER,
-        allowNull: false
-    }, 
-    desc: {
-        type: DataTypes.STRING,
+    },
+    isPremiumUser: {
+        type:DataTypes.BOOLEAN,
+        defaultValue:false,
         allowNull:false
-    },
-    category: {
-        type: DataTypes.ENUM('Food', 'Rent', 'Travel', 'Bills'),
-        allowNull: false
-    },
-    email: {
-        type:DataTypes.STRING,
-        allowNull:false,
-        validate: {
-            isEmail:true
-        }
-    },
+    }
 });
 
 module.exports = User;

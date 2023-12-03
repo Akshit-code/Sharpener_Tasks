@@ -61,7 +61,9 @@ exports.editExpense = async (req, res, next) => {
 exports.getAllExpenses = async (req, res, next) =>{
     console.log("From Get all Expenses: ", req.body);
     try {
-        const expenses = await Expense.findAll({where: {UserId:req.body.userId}});
+        const expenses = await Expense.findAll({
+            where: {UserId:req.body.email}
+        });
         if (!expenses || expenses.length === 0) {
             return res.status(204).json({ message: 'No expenses found for the provided email' });
         }

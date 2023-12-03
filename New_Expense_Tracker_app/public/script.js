@@ -20,6 +20,9 @@ const loginForm = document.getElementById("login-form");
 const loginEmail = document.getElementById('login-email');
 const loginPassword = document.getElementById("login-password");
 
+
+const leaderBoardDiv = document.getElementById("leaderBoard-div");
+
 signUpBtn.addEventListener("click", () => {
     signUpDiv.style.display = "block";
 }); 
@@ -137,6 +140,7 @@ async function loginUser(user) {
             localStorage.setItem('token', data.token);
             localStorage.setItem('isLoggedIn', true);
             location.reload();
+            localStorage.setItem('isPremiumUser', data.isPremiumUser);
             toggleUI();
 
         } else if (response.status === 401) {
@@ -156,13 +160,14 @@ async function loginUser(user) {
 
 function toggleUI() {
     const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+    const isPremiumUser = localStorage.getItem('isPremiumUser') === 'true';
     if(isLoggedIn) {
         loginDiv.style.display="none";
         loginBtn.style.display = "none";
         signUpBtn.style.display = "none";
         const topNavRight = document.querySelector(".topnav-right");
-        topNavRight.appendChild(logOutBtn);
         topNavRight.appendChild(buyPremiumBtn);
+        topNavRight.appendChild(logOutBtn);
         navLinks.forEach(link => {
             link.style.display = "none";
         });
@@ -171,18 +176,25 @@ function toggleUI() {
         logOutBtn.addEventListener("click", ()=> {
             localStorage.removeItem('token');
             localStorage.setItem('isLoggedIn', false);
+            
             console.log("log Out sucessfully");
             logOutBtn.remove();
             buyPremiumBtn.remove();
             addExpensesBtn.remove();
+            expenseFormDiv.style.display = "none";
+            expenseForm.style.display="none";
+            displayExpensesDiv.style.display ="none";
+            
+            if(isPremiumUser) {
+                textNode.remove();
+                leaderBoardDiv.style.display="none"
+            }
             navLinks.forEach(link => {
                 link.style.display = "block";
             });
             loginBtn.style.display = "block";
             signUpBtn.style.display = "block";
-            expenseFormDiv.style.display = "none";
-            expenseForm.style.display="none";
-            displayExpensesDiv.style.display ="none";
+            
         });
 
         buyPremiumBtn.addEventListener("click", ()=> {
@@ -194,10 +206,18 @@ function toggleUI() {
             expenseFormDiv.style.display = "block";
             expenseForm.style.display = "block";
         });
+
+        const textNode = document.createElement('p');
+        textNode.innerHTML="You Are now Pro User";
+        textNode.style.color ="white";
+        textNode.classList.add("topnav.responsive");
+
+        if(isPremiumUser) {
+            topNavCenter.appendChild(textNode);
+            buyPremiumBtn.remove();
+            leaderBoardDiv.style.display = "block";
+        };
     }
 }
-
-
-
 
 window.addEventListener("load", ()=> toggleUI());

@@ -4,7 +4,7 @@ const input3 = document.getElementById("category");
 const submitBtn = document.getElementById("form-btn");
 const expenseForm  = document.getElementById("expense-from");
 const expenseFormDiv = document.getElementById("expense-form-section");
-const displayExpensesDiv = document.getElementById("display-expenses");
+const displayExpensesDiv = document.getElementById("display-expenses-div");
 let isEditing = false;
 
 input1.addEventListener('input', validateForm);
@@ -33,7 +33,6 @@ expenseForm.addEventListener('submit', function(e) {
     expenseForm.style.display="none";
     addExpense(expense);
 });
-
 
 function displayExpense(expense) {
     displayExpensesDiv.style.display = 'block';

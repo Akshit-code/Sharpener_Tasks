@@ -41,14 +41,10 @@ exports.login = async (req, res, next) =>  {
                 console.log("Incorrect Password");
                 return res.status(401).json({message: 'Incorrect Password'});
             };
-            const userDetails = {
-                firstName: isExistingUser.firstName,
-                lastName: isExistingUser.lastName,
-                email : isExistingUser.email
-            }
             const token = jwt.sign({ email: req.body.email }, secretKey);
             const responsePayLoad = {
-                userDetails: userDetails,
+                isPremiumUser : isExistingUser.isPremiumUser,
+                email : isExistingUser.email,
                 token: token
             }
             console.log("User Logged In");
