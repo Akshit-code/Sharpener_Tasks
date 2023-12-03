@@ -2,39 +2,63 @@ const sequelize = require('../util/database');
 const {Sequelize, Datatypes} = require('sequelize');
 const queryInterface = sequelize.getQueryInterface();
 const Expense = require('../models/expense');
+const User = require('../models/user');
 
 exports.addExpense = async (req, res, next) => {
     try {
+        let transaction = await sequelize.transaction();
         console.log("from addExpenseController", req.body);
         const expense = await Expense.create ( {
             amount:req.body.amount,
             desc: req.body.desc,
             category: req.body.category,
             UserId: req.body.userId
-        } );
+        }, {transaction} );
+
         const responseData = {
             expensesId: expense.id,
             userId: expense.UserId
         }
         
+        const totalExpense = await(Expense.sum('amount', {where : {UserId: req.body.userId}, transaction}));
+        const user = await User.findByPk(req.body.userId, {transaction});
+        if (user) {
+            user.totalExpense = totalExpense || 0; // Assign total expenses or default to 0 if null
+            await user.save({transaction});
+        }
+
+        await transaction.commit();
         res.status(201).json(responseData);
         //res.redirect('/');
     } catch (error) {
         console.error(error);
+        if (transaction) await transaction.rollback(); // Rollback the transaction on error
         res.status(500).send('Server Error');
     }
 };
 
 exports.deleteExpense = async (req, res, next) => {
     try {
+        let transaction = await sequelize.transaction();
         const deleteID = req.params.id;
-        const expenseToDelete = await Expense.findByPk(deleteID);
+        const expenseToDelete = await Expense.findByPk(deleteID,  {transaction});
         if(!deleteID) {
+            await transaction.rollback();
             return res.status(404).send("Expense not Found");
         }
-        await expenseToDelete.destroy();
+        await expenseToDelete.destroy( {transaction});
+
+        const totalExpense = await(Expense.sum('amount', {where : {UserId: req.body.userId}, transaction}));
+        const user = await User.findByPk(req.body.userId, {transaction});
+        if (user) {
+            user.totalExpense = totalExpense || 0; // Assign total expenses or default to 0 if null
+            await user.save({transaction});
+        }
+
+        await transaction.commit(); // Commit the transaction if successful
+        res.status(200).send("Expense deleted successfully");
     } catch (error) {
-        console.error(error);
+        if (transaction) await transaction.rollback(); // Rollback the transaction on error
         res.status(500).send('Server Error');
     }
 };
@@ -42,16 +66,36 @@ exports.deleteExpense = async (req, res, next) => {
 exports.editExpense = async (req, res, next) => {
     try {
         console.log("From Edit controller", req.body);
+        let transaction = await sequelize.transaction();
         const editId = req.params.id;
-        const expenseToEdit = await Expense.findByPk(editId);
+        const expenseToEdit = await Expense.findByPk(editId, {transaction});
+
         if (!expenseToEdit) {
-            return res.status(404).send("Expenses not found");
+            await transaction.rollback(); // Rollback the transaction if expense is not found
+            return res.status(404).send("Expense not found");
         }
+
+        const previousAmount = expenseToEdit.amount;
+        const newAmount = req.body.amount;
+
         await expenseToEdit.update( {
             amount:req.body.amount,
             desc: req.body.desc,
-            category: req.body.category
-        })
+            category: req.body.category,
+        },  {transaction} );
+
+        const amountDifference = newAmount - previousAmount;
+        expenseToEdit.totalExpense += amountDifference;
+        
+        const totalExpense = await(Expense.sum('amount', {where : {UserId: req.body.userId}, transaction}));
+        const user = await User.findByPk(req.body.userId, {transaction});
+        if (user) {
+            user.totalExpense = totalExpense || 0; // Assign total expenses or default to 0 if null
+            await user.save({transaction});
+        }
+
+        await expenseToEdit.save({transaction});
+        await transaction.commit(); 
         res.status(201).json(expenseToEdit);
     } catch (error) {
         console.error(error);
