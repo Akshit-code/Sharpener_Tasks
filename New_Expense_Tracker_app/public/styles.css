@@ -290,6 +290,21 @@ background-color: rgb(56, 90, 194);
 background-color: lightgrey;
 }
 
+.forgot {
+border: none;
+outline: none;
+background-color: royalblue;
+padding: 10px;
+border-radius: 10px;
+color: #fff;
+font-size: 16px;
+transform: .3s ease;
+}
+
+.forgott:hover {
+background-color: rgb(56, 90, 194);
+}
+
 @keyframes pulse {
 from {
   transform: scale(0.9);
@@ -391,8 +406,6 @@ outline: none;
 border-color: #007bff; /* Change color on focus if desired */
 box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Add a subtle shadow on focus */
 }
-
-
 
 .leaderboard {
 max-width: 600px;

@@ -14,6 +14,12 @@ const firstName = document.getElementById("firstName");
 const lastName = document.getElementById("lastName");
 const email = document.getElementById("email");
 
+const forgotPasswordBtn = document.getElementById('forgotPasswordbtn');
+const forgotPasswordDiv = document.getElementById("forgotPassword-div");
+const forgotPasswordForm = document.getElementById("forgotPasword-form");
+const forgotPasswordEmail = document.getElementById("reset-email");
+const resetBtn = document.getElementById("reset-btn");
+
 const loginDiv = document.getElementById("login-form-div");
 const loginBtn = document.getElementById("login-btn");
 const loginForm = document.getElementById("login-form");
@@ -31,6 +37,11 @@ loginBtn.addEventListener("click", ()=> {
     loginDiv.style.display = "block";
 });
 
+forgotPasswordBtn.addEventListener("click", ()=> {
+    loginDiv.style.display = "none";
+    forgotPasswordDiv.style.display = "block";
+});
+
 window.onclick = function(event) {
     for (let i = 0; i < modals.length; i++) {
         if (event.target === modals[i]) {
@@ -38,6 +49,7 @@ window.onclick = function(event) {
             loginDiv.style.display = "none";
             expenseFormDiv.style.display = "none";
             expenseForm.style.display="none";
+            forgotPasswordDiv.style.display='none';
         }
     }
 };
@@ -157,6 +169,36 @@ async function loginUser(user) {
         console.log(error);
     }
 }
+
+forgotPasswordForm.addEventListener("submit", (e)=> {
+    e.preventDefault();
+    const user = {email: forgotPasswordEmail.value };
+    forgotPasswordFunction(user);
+
+});
+
+async function forgotPasswordFunction(user) {
+    console.log(user);
+    try {
+        const response = await fetch('http://localhost:3000/user/forgotPassword', {
+            method:'POST',
+            headers:{
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify ( {
+                email:user.email
+            } )
+        });
+
+        if(response.status === 200) {
+            const data = await response.json();
+            console.log(data);
+        }
+    } catch (error) {
+        console.log(error);
+    }
+};
+
 
 function toggleUI() {
     const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';

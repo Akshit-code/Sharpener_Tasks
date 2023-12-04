@@ -7,6 +7,10 @@ const User = require('../models/user');
 const secretKey = process.env.SECRET_KEY;
 const dotenv = require('dotenv');
 const config = dotenv.config();
+const SibApiV3Sdk = require('sib-api-v3-sdk');
+let defaultClient = SibApiV3Sdk.ApiClient.instance;
+let apiKey = defaultClient.authentications['api-key'];
+apiKey.apiKey = process.env.SIB_KEY;
 
 exports.register = async (req, res, next) => {
     try {
@@ -57,4 +61,35 @@ exports.login = async (req, res, next) =>  {
         console.error(error);
         res.status(500).json('Internal Server Error');
     }
-}
+};
+
+exports.forgotPasword = async (req, res, next) => {
+    try {
+        const userEmail = req.body.email;
+        const apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
+
+        // Creating email details
+        const sendSmtpEmail = new SibApiV3Sdk.SendSmtpEmail();
+        sendSmtpEmail.sender = { email: 'akshitmandani100@gmail.com', name: 'Akshit Mandani' }; // Replace with your email and name
+        sendSmtpEmail.to = [{ email:userEmail }];
+        sendSmtpEmail.htmlContent = `
+            <html>
+                <body>
+                    <h1>Password Reset</h1>
+                    <p>Hello User,</p>
+                    <p>Click the link below to reset your password:</p>
+                    <button> Rest Password </button>
+                </body>
+            </html>
+        `;
+        sendSmtpEmail.subject = 'Password Reset'; // Email subject
+
+        // Send the email
+        const sendSmtpEmailResponse = await apiInstance.sendTransacEmail(sendSmtpEmail, apiKey);
+        console.log('Email sent successfully:', sendSmtpEmailResponse);
+
+        res.status(200).json(req.body);
+    } catch (error) {
+        console.log(error);
+    }
+};

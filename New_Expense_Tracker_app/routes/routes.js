@@ -8,7 +8,7 @@ const premium = require('../controllers/premium');
 
 router.post("/register", userController.register);
 router.post("/login", userController.login);
-
+router.post("/forgotPassword", userController.forgotPasword);
 router.post("/add-expense",authToken.authToken, expenseController.addExpense);
 router.delete("/delete-expense/:id", authToken.authToken, expenseController.deleteExpense);
 router.put("/edit-expense/:id",authToken.authToken, expenseController.editExpense);
