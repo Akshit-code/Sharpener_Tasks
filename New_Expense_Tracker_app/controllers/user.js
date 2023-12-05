@@ -3,10 +3,15 @@ const {Sequelize, Datatypes} = require('sequelize');
 const queryInterface = sequelize.getQueryInterface();
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
+const uuid = require('uuid');
+
 const User = require('../models/user');
+const ResetPassword =  require('../models/resetPassword');
+
 const secretKey = process.env.SECRET_KEY;
 const dotenv = require('dotenv');
 const config = dotenv.config();
+
 const SibApiV3Sdk = require('sib-api-v3-sdk');
 let defaultClient = SibApiV3Sdk.ApiClient.instance;
 let apiKey = defaultClient.authentications['api-key'];
@@ -64,21 +69,36 @@ exports.login = async (req, res, next) =>  {
 };
 
 exports.forgotPasword = async (req, res, next) => {
+    
     try {
-        const userEmail = req.body.email;
-        const apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
+        const uniqueId = uuid.v4();
+        console.log("Unique:ID =>", uniqueId);
+        const isExistingUser = await User.findOne({ where: { email: req.body.email } });
+        if(!isExistingUser) {
+            return res.status(404).json({message: "User not found"});
+        }
+        const options = {
+            id: uniqueId,
+            isActive: true,
+            email: req.body.email,
+            UserId: isExistingUser.id
+        };
+        
+        const insertQuery = ResetPassword.create({id, isActive, email, UserId} = options );
 
+        const apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
+        
         // Creating email details
         const sendSmtpEmail = new SibApiV3Sdk.SendSmtpEmail();
         sendSmtpEmail.sender = { email: 'akshitmandani100@gmail.com', name: 'Akshit Mandani' }; // Replace with your email and name
-        sendSmtpEmail.to = [{ email:userEmail }];
+        sendSmtpEmail.to = [{ email:req.body.email }];
         sendSmtpEmail.htmlContent = `
             <html>
                 <body>
                     <h1>Password Reset</h1>
                     <p>Hello User,</p>
                     <p>Click the link below to reset your password:</p>
-                    <button> Rest Password </button>
+                    <a href="http://localhost:3000/password/resetPassword/${uniqueId}"> Click Here </a>
                 </body>
             </html>
         `;
@@ -88,8 +108,39 @@ exports.forgotPasword = async (req, res, next) => {
         const sendSmtpEmailResponse = await apiInstance.sendTransacEmail(sendSmtpEmail, apiKey);
         console.log('Email sent successfully:', sendSmtpEmailResponse);
 
-        res.status(200).json(req.body);
+        res.status(200).json(options);
     } catch (error) {
         console.log(error);
+    }
+};
+
+exports.resetPassword = async (req, res, next) => {
+    console.log("From Reset Controller => ", req.body);
+    try {
+        const resetEntry = await ResetPassword.findOne({ where: { id: req.body.uniqueId, isActive: true } });
+
+        if (resetEntry) {
+            const salt = await bcrypt.genSalt(10);
+            const hashPassword = await bcrypt.hash(req.body.resetPassword, salt);
+
+            const userId = resetEntry.UserId;
+
+            // Update the user's password based on the reset entry
+            const user = await User.findByPk(userId); // Assuming UserId is the association key
+            if (user) {
+                await user.update({ password: hashPassword });
+                // Deactivate the reset entry after password change
+                await resetEntry.update({ isActive: false });
+
+                res.status(200).json({ message: "Password reset successful" });
+            } else {
+                res.status(404).json({ message: "User not found" });
+            }
+        } else {
+            res.status(404).json({ message: "Invalid or expired reset link" });
+        }
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: "Internal Server Error" });
     }
 };

@@ -8,6 +8,7 @@ const dotenv = require('dotenv');
 const config = dotenv.config();
 const RazorPay = require('razorpay');
 const SibApiV3Sdk = require('sib-api-v3-sdk');
+const uuid = require('uuid');
 
 const sequelize = require('./util/database');
 const razorPayInstance = require('./util/razorPay');
@@ -15,6 +16,7 @@ const routes = require('./routes/routes');
 const User = require('./models/user');
 const Expense = require('./models/expense');
 const Orders = require('./models/orders');
+const ResetPassword = require('./models/resetPassword');
 
 app.use(cors());
 app.use(bodyParser.urlencoded( { extended:false }));
@@ -27,6 +29,9 @@ User.hasMany(Expense);
 User.hasMany(Orders);
 Orders.belongsTo(User);
 
+User.hasMany(ResetPassword);
+ResetPassword.belongsTo(User);
+
 app.use("/homepage", routes);
 app.use("/homepage", (req, res, next) => {
     res.sendFile(path.join(__dirname, 'views', 'index.html'));
@@ -34,6 +39,12 @@ app.use("/homepage", (req, res, next) => {
 app.use("/user", routes );
 app.use("/payment", routes);
 app.use('/premium', routes);
+
+app.get("/password/resetPassword/:uniqueId", (req, res, next)=> {
+    res.sendFile(path.join(__dirname, 'views', 'resetPassword.html'));
+} );
+// app.use("/password", routes);
+
 
 app.use("/", (req, res, next) => {
     res.sendFile(path.join(__dirname, 'views', 'index.html'));
