@@ -34,28 +34,64 @@ expenseForm.addEventListener('submit', function(e) {
     addExpense(expense);
 });
 
+const table = document.createElement("table");
+table.classList.add("expense-table");
+
+const headerRow = table.insertRow();
+const headers = ["Date","Amount", "Description", "Category", "Edit", "Delete"];
+headers.forEach((headerText) => {
+    const headerCell = document.createElement("th");
+    headerCell.textContent = headerText;
+    headerCell.classList.add("expense-header");
+    headerRow.appendChild(headerCell);
+});
+
 function displayExpense(expense) {
     displayExpensesDiv.style.display = 'block';
     const editID = expense.expensesId;
     const deleteID = expense.expensesId ;
 
-    const newText = `Amount: ${expense.amount},
-        Description: ${expense.desc}, 
-        Category: ${expense.category}`
+    // const newText = `Amount: ${expense.amount},
+    //     Description: ${expense.desc}, 
+    //     Category: ${expense.category}`
     
-    const p =  document.createElement("p");
-    p.appendChild(document.createTextNode(newText));
+    // const p =  document.createElement("p");
+    // p.appendChild(document.createTextNode(newText));
+
+    // const editBtn = document.createElement("button");
+    // const delBtn = document.createElement("button");
+    // editBtn.innerHTML = "Edit";
+    // delBtn.innerHTML = "Delete";
+    
+    
+    // displayExpensesDiv.appendChild(editBtn);
+    // displayExpensesDiv.appendChild(delBtn);
+    // editBtn.classList.add("edit-button");
+	// delBtn.classList.add("delete-button");
+    
+
+    const row = table.insertRow();
+    const cell1 = row.insertCell(0);
+    const cell2 = row.insertCell(1);
+    const cell3 = row.insertCell(2);
+    const cell4 = row.insertCell(3);
+    const cell5 = row.insertCell(4);
+    const cell6 = row.insertCell(5);
+    const date = new Date((expense.date));
+    const constformattedDate = date.toLocaleDateString('en-GB', { timeZone: 'UTC' });
+    cell1.innerHTML = constformattedDate;
+    cell2.innerHTML = expense.amount;
+    cell3.innerHTML = expense.desc;
+    cell4.innerHTML = expense.category;
 
     const editBtn = document.createElement("button");
     const delBtn = document.createElement("button");
     editBtn.innerHTML = "Edit";
     delBtn.innerHTML = "Delete";
-    
-    displayExpensesDiv.appendChild(p);
-    displayExpensesDiv.appendChild(editBtn);
-    displayExpensesDiv.appendChild(delBtn);
     editBtn.classList.add("edit-button");
-	delBtn.classList.add("delete-button");
+    delBtn.classList.add("delete-button");
+    cell5.appendChild(editBtn);
+    cell6.appendChild(delBtn);
     let updateBtn;
 
     editBtn.addEventListener("click", function() {
@@ -90,7 +126,7 @@ function displayExpense(expense) {
         editBtn.remove();
         delBtn.remove();
     });
-
+    displayExpensesDiv.appendChild(table);
     input1.value = '';
     input2.value = '';
     input3.value = '';
@@ -174,6 +210,7 @@ window.addEventListener('load', ()=> {
     }
 });
 
+let expenseData;
 async function getExpenses() {
     try {
         const token = localStorage.getItem('token');
@@ -185,14 +222,16 @@ async function getExpenses() {
         });
         
         console.log('***** From Const UI ********');
+ 
         if(response.status == 200) {
-            const expenseData = await response.json();
+            expenseData = await response.json();
             expenseData.forEach(element => {
                 const expense = {
                     amount: element.amount,
                     desc: element.desc,
                     category: element.category, 
-                    expensesId : element.id
+                    expensesId : element.id,
+                    date: element.createdAt
                 };
                 displayExpense(expense);
             });
@@ -201,7 +240,6 @@ async function getExpenses() {
         } else {
             console.error();
         }
-        
     } catch (err) {
         console.log(err);
     }

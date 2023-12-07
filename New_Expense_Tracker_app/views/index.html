@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-    <title>Document</title>
+    <title>HomePage</title>
 </head>
 <body>
     <main>
@@ -143,6 +143,29 @@
                     </fieldset>
                 </form>
             </div>            
+        </div>
+        <div id="date-picker-div" style="display:none;">
+            <label for="startDate">Start Date:</label>
+            <input type="date" id="startDate" >
+            <label for="endDate">End Date:</label>
+            <input type="date" id="endDate" >
+            <label for="'report-file-name">Enter File Name
+            <input type="text" id="report-file-name"></label>
+            <button id="downloadBtn" disabled>Download</button>
+        </div>
+        <div id="reportTableDiv" style="display: none;">
+            <table id="reportsTable" class="expense-table">
+                <thead class="expense-table">
+                    <tr class="expense-table">
+                        <th>Report Name</th>
+                        <th>Generated Date</th>
+                        <th>Download</th>
+                    </tr>
+                </thead>
+                <tbody id="reportsTableBody">
+                    <!-- Table body will be populated dynamically -->
+                </tbody>
+            </table>
         </div>
         <!-- Display Expense -->
         <div id="display-expenses-div" style="display:none"></div>

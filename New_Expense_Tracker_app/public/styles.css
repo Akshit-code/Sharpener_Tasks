@@ -436,3 +436,53 @@ font-weight: bold;
 .user .expense {
 font-size: 16px;
 }
+
+/* Style for the table */
+.expense-table {
+width: auto;
+border-collapse: collapse;
+margin-bottom: 20px;
+margin: 0 auto;
+}
+
+/* Style for table headers */
+.expense-table th {
+background-color: #f2f2f2;
+padding: 8px;
+text-align: left;
+}
+
+/* Style for table data cells */
+.expense-table td {
+border-bottom: 1px solid #ddd;
+padding: 8px;
+}
+
+/* Style for edit and delete buttons */
+.edit-button,
+.delete-button {
+padding: 5px 10px;
+margin: 3px;
+border: none;
+border-radius: 3px;
+cursor: pointer;
+color: white;
+}
+
+.edit-button {
+background-color: #4CAF50; /* Green */
+}
+
+.delete-button {
+background-color: #f44336; /* Red */
+}
+
+
+/* Style for table headers */
+.expense-table th {
+background-color: #f2f2f2;
+padding: 8px;
+text-align: left;
+font-weight: bold;
+border-bottom: 1px solid #ddd;
+}

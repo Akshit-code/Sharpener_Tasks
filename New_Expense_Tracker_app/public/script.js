@@ -226,7 +226,8 @@ function toggleUI() {
             expenseFormDiv.style.display = "none";
             expenseForm.style.display="none";
             displayExpensesDiv.style.display ="none";
-            
+            reportTableDiv.style.display= "none";
+            datePickerDiv.style.display = "none";
             if(isPremiumUser) {
                 textNode.remove();
                 leaderBoardDiv.style.display="none"
@@ -258,6 +259,10 @@ function toggleUI() {
             topNavCenter.appendChild(textNode);
             buyPremiumBtn.remove();
             leaderBoardDiv.style.display = "block";
+            datePickerDiv.style.display = "block";
+            reportTableDiv.style.display= "block";
+            datePickerDiv.style.display = "block";
+            fetchReports();
         };
     }
 }
