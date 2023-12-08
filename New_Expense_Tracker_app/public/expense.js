@@ -5,6 +5,7 @@ const submitBtn = document.getElementById("form-btn");
 const expenseForm  = document.getElementById("expense-from");
 const expenseFormDiv = document.getElementById("expense-form-section");
 const displayExpensesDiv = document.getElementById("display-expenses-div");
+const expensesTableBody = document.getElementById("expensesTableBody");
 let isEditing = false;
 
 input1.addEventListener('input', validateForm);
@@ -34,103 +35,84 @@ expenseForm.addEventListener('submit', function(e) {
     addExpense(expense);
 });
 
-const table = document.createElement("table");
-table.classList.add("expense-table");
+// const table = document.createElement("table");
+// table.classList.add("expense-table");
 
-const headerRow = table.insertRow();
-const headers = ["Date","Amount", "Description", "Category", "Edit", "Delete"];
-headers.forEach((headerText) => {
-    const headerCell = document.createElement("th");
-    headerCell.textContent = headerText;
-    headerCell.classList.add("expense-header");
-    headerRow.appendChild(headerCell);
-});
+// const headerRow = table.insertRow();
+// const headers = ["Date","Amount", "Description", "Category", "Edit", "Delete"];
+// headers.forEach((headerText) => {
+//     const headerCell = document.createElement("th");
+//     headerCell.textContent = headerText;
+//     headerCell.classList.add("expense-header");
+//     headerRow.appendChild(headerCell);
+// });
 
-function displayExpense(expense) {
-    displayExpensesDiv.style.display = 'block';
-    const editID = expense.expensesId;
-    const deleteID = expense.expensesId ;
+// function displayExpense(expense) {
+//     displayExpensesDiv.style.display = 'block';
+//     const editID = expense.expensesId;
+//     const deleteID = expense.expensesId ;
 
-    // const newText = `Amount: ${expense.amount},
-    //     Description: ${expense.desc}, 
-    //     Category: ${expense.category}`
-    
-    // const p =  document.createElement("p");
-    // p.appendChild(document.createTextNode(newText));
+//     const row = table.insertRow();
+//     const cell1 = row.insertCell(0);
+//     const cell2 = row.insertCell(1);
+//     const cell3 = row.insertCell(2);
+//     const cell4 = row.insertCell(3);
+//     const cell5 = row.insertCell(4);
+//     const cell6 = row.insertCell(5);
+//     const date = new Date((expense.date));
+//     const constformattedDate = date.toLocaleDateString('en-GB', { timeZone: 'UTC' });
+//     cell1.innerHTML = constformattedDate;
+//     cell2.innerHTML = expense.amount;
+//     cell3.innerHTML = expense.desc;
+//     cell4.innerHTML = expense.category;
 
-    // const editBtn = document.createElement("button");
-    // const delBtn = document.createElement("button");
-    // editBtn.innerHTML = "Edit";
-    // delBtn.innerHTML = "Delete";
-    
-    
-    // displayExpensesDiv.appendChild(editBtn);
-    // displayExpensesDiv.appendChild(delBtn);
-    // editBtn.classList.add("edit-button");
-	// delBtn.classList.add("delete-button");
-    
+//     const editBtn = document.createElement("button");
+//     const delBtn = document.createElement("button");
+//     editBtn.innerHTML = "Edit";
+//     delBtn.innerHTML = "Delete";
+//     editBtn.classList.add("edit-button");
+//     delBtn.classList.add("delete-button");
+//     cell5.appendChild(editBtn);
+//     cell6.appendChild(delBtn);
+//     let updateBtn;
 
-    const row = table.insertRow();
-    const cell1 = row.insertCell(0);
-    const cell2 = row.insertCell(1);
-    const cell3 = row.insertCell(2);
-    const cell4 = row.insertCell(3);
-    const cell5 = row.insertCell(4);
-    const cell6 = row.insertCell(5);
-    const date = new Date((expense.date));
-    const constformattedDate = date.toLocaleDateString('en-GB', { timeZone: 'UTC' });
-    cell1.innerHTML = constformattedDate;
-    cell2.innerHTML = expense.amount;
-    cell3.innerHTML = expense.desc;
-    cell4.innerHTML = expense.category;
+//     editBtn.addEventListener("click", function() {
+//         expenseFormDiv.style.display = "block";
+//         expenseForm.style.display="block";
+//         isEditing = true;
+//         input1.value = expense.amount;
+//         input2.value = expense.desc;
+//         input3.value = expense.category;
+//         p.remove();
+//         editBtn.remove();
+//         delBtn.remove();
+//         submitBtn.disabled = true;
+//         updateBtn = document.createElement("button");
+//         updateBtn.innerHTML = "Update";
+//         document.getElementById("form-fieldset").appendChild(updateBtn);
+//         updateBtn.addEventListener("click", function() {
+//             expense.amount = input1.value;
+//             expense.desc = input2.value;
+//             expense.category = input3.value;
+//             editExpense(expense, editID);
+//             updateBtn.remove();
+//             isEditing = false;
+//             expenseFormDiv.style.display = "none";
+//             expenseForm.style.display="none";
+//         });
+//     });
 
-    const editBtn = document.createElement("button");
-    const delBtn = document.createElement("button");
-    editBtn.innerHTML = "Edit";
-    delBtn.innerHTML = "Delete";
-    editBtn.classList.add("edit-button");
-    delBtn.classList.add("delete-button");
-    cell5.appendChild(editBtn);
-    cell6.appendChild(delBtn);
-    let updateBtn;
-
-    editBtn.addEventListener("click", function() {
-        expenseFormDiv.style.display = "block";
-        expenseForm.style.display="block";
-        isEditing = true;
-        input1.value = expense.amount;
-        input2.value = expense.desc;
-        input3.value = expense.category;
-        p.remove();
-        editBtn.remove();
-        delBtn.remove();
-        submitBtn.disabled = true;
-        updateBtn = document.createElement("button");
-        updateBtn.innerHTML = "Update";
-        document.getElementById("form-fieldset").appendChild(updateBtn);
-        updateBtn.addEventListener("click", function() {
-            expense.amount = input1.value;
-            expense.desc = input2.value;
-            expense.category = input3.value;
-            editExpense(expense, editID);
-            updateBtn.remove();
-            isEditing = false;
-            expenseFormDiv.style.display = "none";
-            expenseForm.style.display="none";
-        });
-    });
-
-    delBtn.addEventListener("click", function() {
-        deleteExpense(deleteID);
-        p.remove();
-        editBtn.remove();
-        delBtn.remove();
-    });
-    displayExpensesDiv.appendChild(table);
-    input1.value = '';
-    input2.value = '';
-    input3.value = '';
-}
+//     delBtn.addEventListener("click", function() {
+//         deleteExpense(deleteID);
+//         p.remove();
+//         editBtn.remove();
+//         delBtn.remove();
+//     });
+//     displayExpensesDiv.appendChild(table);
+//     input1.value = '';
+//     input2.value = '';
+//     input3.value = '';
+// }
 
 async function addExpense(expense) {
     try {
@@ -154,7 +136,7 @@ async function addExpense(expense) {
         expense.userId = data.userId;
         console.log("Expense details after API call:");
         console.log(expense);
-        displayExpense(expense);
+        displayExpensePage(expense);
     } catch (err) {
         console.log(err);
     }
@@ -196,7 +178,7 @@ async function editExpense(expense, editID) {
         .then( data => {
             console.log("***** From edit Listner ****");
             console.log(expense);
-            displayExpense(expense);
+            displayExpensePage(expense);
         })
     } catch(err) {
         console.log(err);
@@ -233,8 +215,10 @@ async function getExpenses() {
                     expensesId : element.id,
                     date: element.createdAt
                 };
-                displayExpense(expense);
             });
+            displayExpensePage(expenseData);
+            // Initial display on page load
+            paginate(expenseData); 
         } else if(response.status == 204) {
             console.log("No expenses found for the provided email");
         } else {
@@ -243,4 +227,149 @@ async function getExpenses() {
     } catch (err) {
         console.log(err);
     }
-}   
+};
+
+let currentExpensePage = 1;
+const rowsPerPage = 5; 
+
+function displayExpensePage(expenses, page=1) {
+    displayExpensesDiv.style.display = 'block';
+    const isSingleExpense = !Array.isArray(expenses);
+    if (isSingleExpense) {
+        expenses = [expenses];
+    }
+    const startIndex = (page - 1) * rowsPerPage;
+    const endIndex = startIndex + rowsPerPage;
+    const paginatedExpenses = expenses.slice(startIndex, endIndex);
+    expensesTableBody.innerHTML = '';
+
+    paginatedExpenses.forEach (expenses => {
+        console.log(expenses);
+        console.log(expenses.id);
+        console.log("From Pagination => ",expenses);
+        const editID = expenses.id;
+        const deleteID = expenses.id;
+        const row = document.createElement('tr');
+
+        const dateCell = document.createElement('td');
+        const date = new Date((expenses.createdAt));
+        const constformattedDate = date.toLocaleDateString('en-GB', { timeZone: 'UTC' });
+        dateCell.textContent = constformattedDate;
+        row.appendChild(dateCell);
+        
+        
+        const amountCell = document.createElement('td');
+        amountCell.textContent = expenses.amount;
+        row.appendChild(amountCell);
+
+        const descCell = document.createElement('td');
+        descCell.textContent = expenses.desc;
+        row.appendChild(descCell)
+
+        const categoryCell = document.createElement('td');
+        categoryCell.textContent = expenses.category;
+        row.appendChild(categoryCell)
+
+        const editBtn = document.createElement("button");
+        const delBtn = document.createElement("button");
+        editBtn.innerHTML = "Edit";
+        delBtn.innerHTML = "Delete";
+        editBtn.classList.add("edit-button");
+        delBtn.classList.add("delete-button");
+
+        const editCell = document.createElement('td');
+        editCell.appendChild(editBtn);
+        row.appendChild(editCell)
+
+        const deleteCell = document.createElement('td');
+        deleteCell.appendChild(delBtn);
+        row.appendChild(deleteCell);
+
+        expensesTableBody.appendChild(row);
+
+        let updateBtn;
+        editBtn.addEventListener("click", function() {
+            expenseFormDiv.style.display = "block";
+            expenseForm.style.display="block";
+            isEditing = true;
+            input1.value = expenses.amount;
+            input2.value = expenses.desc;
+            input3.value = expenses.category;
+            p.remove();
+            editBtn.remove();
+            delBtn.remove();
+            submitBtn.disabled = true;
+            updateBtn = document.createElement("button");
+            updateBtn.innerHTML = "Update";
+            document.getElementById("form-fieldset").appendChild(updateBtn);
+            updateBtn.addEventListener("click", function() {
+                expenses.amount = input1.value;
+                expenses.desc = input2.value;
+                expenses.category = input3.value;
+                editExpense(expenses, editID);
+                updateBtn.remove();
+                isEditing = false;
+                expenseFormDiv.style.display = "none";
+                expenseForm.style.display="none";
+            });
+        });
+        delBtn.addEventListener("click", function() {
+            deleteExpense(deleteID);
+            p.remove();
+            editBtn.remove();
+            delBtn.remove();
+        });
+    });
+}
+
+function paginate(expenseData) {
+    const isExpense = !Array.isArray(expenseData);
+    if (isExpense) {
+        expenseData = [expenseData];
+    }
+    const totalPages = Math.ceil(expenseData.length / rowsPerPage);
+    const prevPageButton = document.getElementById('prevPage');
+    const nextPageButton = document.getElementById('nextPage');
+
+    // Update current page text
+    document.getElementById('currentPage').textContent = `Page ${currentExpensePage}`;
+
+    if (currentExpensePage === 1) {
+        prevPageButton.disabled = true;
+    } else {
+        prevPageButton.disabled = false;
+    }
+
+    if (currentExpensePage === totalPages) {
+        nextPageButton.disabled = true;
+    } else {
+        nextPageButton.disabled = false;
+    }
+
+    // Calculate the start and end indexes for the current page
+    const startIndex = (currentExpensePage - 1) * rowsPerPage;
+    const endIndex = startIndex + rowsPerPage;
+
+    // Extract the expenses for the current page
+    const expensesForCurrentPage = expenseData.slice(startIndex, endIndex);
+
+    // Display the expenses for the current page
+    displayExpensePage(expensesForCurrentPage);
+}
+
+// Event listener for the 'Previous' button
+document.getElementById('prevPage').addEventListener('click', () => {
+    if (currentExpensePage > 1) {
+        currentExpensePage--;
+        paginate(expenseData);
+    }
+});
+
+// Event listener for the 'Next' button
+document.getElementById('nextPage').addEventListener('click', () => {
+    const totalPages = Math.ceil(expenseData.length / rowsPerPage);
+    if (currentExpensePage < totalPages) {
+        currentExpensePage++;
+        paginate(expenseData);
+    }
+});

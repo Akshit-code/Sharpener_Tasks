@@ -159,14 +159,24 @@ async function fetchReports() {
             console.error('Failed to fetch reports');
         }
     } catch (error) {
-        
+        console.log(error);
     }
 }
 
-function displayReports(reports) {
-    const reportsTableBody = document.getElementById('reportsTableBody');
+const reportsPerPage = 1; // Set the number of reports to display per page
+let currentPage = 1;
+const reportsData = [];
 
-    reports.forEach(report => {
+function displayReports(reports, pageNumber = 1) {
+    const reportsTableBody = document.getElementById('reportsTableBody');
+    reportsTableBody.innerHTML = '';
+
+    const startIndex = (pageNumber - 1) * reportsPerPage;
+    const endIndex = startIndex + reportsPerPage;
+    const reportsToShow = reports.slice(startIndex, endIndex);
+
+
+    reportsToShow.forEach(report => {
         const row = document.createElement('tr');
 
         const nameCell = document.createElement('td');
@@ -198,6 +208,36 @@ function downloadReport(reportUrl, fileName) {
     a.href = reportUrl;
     a.download = `${fileName}.csv`; // Set desired filename
     a.click();
+}
+
+function updatePaginationButtons() {
+    const totalPages = Math.ceil(reports.length / reportsPerPage);
+    document.getElementById('reportCurrentPage').textContent = `Page ${currentPage}`;
+
+    const prevPageButton = document.getElementById('reportPrevPage');
+    const nextPageButton = document.getElementById('reportNextPage');
+
+    if (currentPage === 1) {
+        prevPageButton.disabled = true;
+    } else {
+        prevPageButton.disabled = false;
+        prevPageButton.addEventListener('click', () => {
+            currentPage--;
+            displayReports(reportsData, currentPage);
+            updatePaginationButtons();
+        });
+    }
+
+    if (currentPage === totalPages) {
+        nextPageButton.disabled = true;
+    } else {
+        nextPageButton.disabled = false;
+        nextPageButton.addEventListener('click', () => {
+            currentPage++;
+            displayReports(reportsData, currentPage);
+            updatePaginationButtons();
+        });
+    }
 }
 
 // filterBtn.addEventListener("click", ()=> {

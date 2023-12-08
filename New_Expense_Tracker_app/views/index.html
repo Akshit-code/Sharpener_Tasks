@@ -144,6 +144,31 @@
                 </form>
             </div>            
         </div>
+        
+        <!-- Display Expense -->
+        <div id="display-expenses-div" style="display:none">
+            <table id="expenseTable" class="expense-table">
+                <thead class="expense-table">
+                    <tr class="expense-table">
+                        <th>Date</th>
+                        <th>Amount</th>
+                        <th>Description</th>
+                        <th>category</th>
+                        <th>Edit</th>
+                        <th>Delete</th>
+                    </tr>
+                </thead>
+                <tbody id="expensesTableBody">
+                    <!-- Table body will be populated dynamically -->
+                </tbody>
+            </table>
+            <div id="paginationButtons">
+                <button id="prevPage">Previous</button>
+                <span id="currentPage">Page 1</span>
+                <button id="nextPage">Next</button>
+            </div>
+        </div>
+
         <div id="date-picker-div" style="display:none;">
             <label for="startDate">Start Date:</label>
             <input type="date" id="startDate" >
@@ -166,9 +191,13 @@
                     <!-- Table body will be populated dynamically -->
                 </tbody>
             </table>
+            <div id="reportPaginationButtons">
+                <button id="reportPrevPage">Previous</button>
+                <span id="reportCurrentPage">Page 1</span>
+                <button id="reportNextPage">Next</button>
+            </div>
         </div>
-        <!-- Display Expense -->
-        <div id="display-expenses-div" style="display:none"></div>
+        
         <div id="RazorPay-Div"></div>
         <div id="leaderBoard-div" style="display:none">
             <div class="leaderboard" style="display: none" id="leaderboard"></div>

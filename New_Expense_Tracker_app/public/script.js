@@ -215,6 +215,7 @@ function toggleUI() {
         });
         topNavCenter.appendChild(addExpensesBtn);
         displayExpensesDiv.style.display="block";
+        
         logOutBtn.addEventListener("click", ()=> {
             localStorage.removeItem('token');
             localStorage.setItem('isLoggedIn', false);

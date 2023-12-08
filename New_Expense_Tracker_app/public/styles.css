@@ -486,3 +486,54 @@ text-align: left;
 font-weight: bold;
 border-bottom: 1px solid #ddd;
 }
+
+#paginationButtons {
+margin: 0 auto;
+}
+
+#paginationButtons button {
+padding: 8px 12px;
+margin-right: 5px;
+cursor: pointer;
+background-color: #f2f2f2;
+border: 1px solid #dddddd;
+}
+
+#paginationButtons button:disabled {
+cursor: not-allowed;
+opacity: 0.6;
+}
+
+#reportTableDiv {
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+text-align: center;
+}
+
+#display-expenses-div {
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+text-align: center;
+}
+
+
+#reportPaginationButtons {
+margin: 0 auto;
+}
+
+#reportPaginationButtons button {
+padding: 8px 12px;
+margin-right: 5px;
+cursor: pointer;
+background-color: #f2f2f2;
+border: 1px solid #dddddd;
+}
+
+#reportPaginationButtons button:disabled {
+cursor: not-allowed;
+opacity: 0.6;
+}
