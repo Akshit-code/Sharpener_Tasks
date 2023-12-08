@@ -147,6 +147,15 @@
         
         <!-- Display Expense -->
         <div id="display-expenses-div" style="display:none">
+            <p style="display:inline" > Row per Page</p>
+            <label >
+                <select id="rowsPerPageSelect" name ="numberOfExpenses" >
+                    <option value="5">5</option>
+                    <option value="10">10</option>
+                    <option value="15">25</option>
+                    <option value="50">50</option>
+                </select>
+            </label>
             <table id="expenseTable" class="expense-table">
                 <thead class="expense-table">
                     <tr class="expense-table">
@@ -166,6 +175,7 @@
                 <button id="prevPage">Previous</button>
                 <span id="currentPage">Page 1</span>
                 <button id="nextPage">Next</button>
+                <span id="pageInfo"></span>
             </div>
         </div>
 
@@ -197,7 +207,7 @@
                 <button id="reportNextPage">Next</button>
             </div>
         </div>
-        
+
         <div id="RazorPay-Div"></div>
         <div id="leaderBoard-div" style="display:none">
             <div class="leaderboard" style="display: none" id="leaderboard"></div>

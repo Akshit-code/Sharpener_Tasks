@@ -229,24 +229,27 @@ async function getExpenses() {
     }
 };
 
-let currentExpensePage = 1;
-const rowsPerPage = 5; 
+// let currentExpensePage = 1;
+let rowsPerPage = 5;
+const perPageRows = document.getElementById("rowsPerPageSelect");
 
-function displayExpensePage(expenses, page=1) {
+perPageRows.addEventListener("change", ()=> {
+    rowsPerPage = perPageRows.value;
+    displayExpensePage(expenseData)
+})
+ 
+function displayExpensePage(expenses, currentExpensePage = 1) {
     displayExpensesDiv.style.display = 'block';
     const isSingleExpense = !Array.isArray(expenses);
     if (isSingleExpense) {
         expenses = [expenses];
     }
-    const startIndex = (page - 1) * rowsPerPage;
+    const startIndex = (currentExpensePage - 1) * rowsPerPage;
     const endIndex = startIndex + rowsPerPage;
     const paginatedExpenses = expenses.slice(startIndex, endIndex);
     expensesTableBody.innerHTML = '';
 
     paginatedExpenses.forEach (expenses => {
-        console.log(expenses);
-        console.log(expenses.id);
-        console.log("From Pagination => ",expenses);
         const editID = expenses.id;
         const deleteID = expenses.id;
         const row = document.createElement('tr');
@@ -295,7 +298,6 @@ function displayExpensePage(expenses, page=1) {
             input1.value = expenses.amount;
             input2.value = expenses.desc;
             input3.value = expenses.category;
-            p.remove();
             editBtn.remove();
             delBtn.remove();
             submitBtn.disabled = true;
@@ -323,6 +325,8 @@ function displayExpensePage(expenses, page=1) {
 }
 
 function paginate(expenseData) {
+    const currentExpensePage = document.getElementById('currentPage').textContent;
+    console.log( "From Paginate =>",currentExpensePage);
     const isExpense = !Array.isArray(expenseData);
     if (isExpense) {
         expenseData = [expenseData];
@@ -359,6 +363,8 @@ function paginate(expenseData) {
 
 // Event listener for the 'Previous' button
 document.getElementById('prevPage').addEventListener('click', () => {
+    const currentExpensePage = document.getElementById('currentPage').textContent;
+    console.log( "From prevpage =>",currentExpensePage);
     if (currentExpensePage > 1) {
         currentExpensePage--;
         paginate(expenseData);
@@ -367,6 +373,8 @@ document.getElementById('prevPage').addEventListener('click', () => {
 
 // Event listener for the 'Next' button
 document.getElementById('nextPage').addEventListener('click', () => {
+    const currentExpensePage = document.getElementById('currentPage').textContent;
+    console.log( "From nextPage =>",currentExpensePage);
     const totalPages = Math.ceil(expenseData.length / rowsPerPage);
     if (currentExpensePage < totalPages) {
         currentExpensePage++;
