@@ -29,7 +29,6 @@ expenseForm.addEventListener('submit', function(e) {
         desc: input2.value,
         category: input3.value
     }
-    console.log(expense);
     expenseFormDiv.style.display = "none";
     expenseForm.style.display="none";
     addExpense(expense);
@@ -131,11 +130,9 @@ async function addExpense(expense) {
             }),
         })
         const data = await response.json();
-        console.log( "DATA: ",data);
+        console.log("Added Expenses Successfully");
         expense.expensesId = data.expensesId;
         expense.userId = data.userId;
-        console.log("Expense details after API call:");
-        console.log(expense);
         displayExpensePage(expense);
     } catch (err) {
         console.log(err);
@@ -151,7 +148,8 @@ async function deleteExpense( deleteID ) {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
             }
-        })
+        });
+        console.log("Deleted Expenses Successfully");
     } catch(err) {
         console.log(err);
     }
@@ -176,8 +174,7 @@ async function editExpense(expense, editID) {
             return response.json();
         })
         .then( data => {
-            console.log("***** From edit Listner ****");
-            console.log(expense);
+            console.log("Edited Expenses Successfully");
             displayExpensePage(expense);
         })
     } catch(err) {
@@ -229,22 +226,22 @@ async function getExpenses() {
     }
 };
 
-// let currentExpensePage = 1;
+let currentExpensePage = 1;
 let rowsPerPage = 5;
 const perPageRows = document.getElementById("rowsPerPageSelect");
 
 perPageRows.addEventListener("change", ()=> {
-    rowsPerPage = perPageRows.value;
-    displayExpensePage(expenseData)
+    rowsPerPage = parseInt(perPageRows.value);
+    displayExpensePage(expenseData, currentExpensePage);
 })
  
-function displayExpensePage(expenses, currentExpensePage = 1) {
+function displayExpensePage(expenses, currentPage = 1) {
     displayExpensesDiv.style.display = 'block';
     const isSingleExpense = !Array.isArray(expenses);
     if (isSingleExpense) {
         expenses = [expenses];
     }
-    const startIndex = (currentExpensePage - 1) * rowsPerPage;
+    const startIndex = (currentPage - 1) * rowsPerPage;
     const endIndex = startIndex + rowsPerPage;
     const paginatedExpenses = expenses.slice(startIndex, endIndex);
     expensesTableBody.innerHTML = '';
@@ -324,60 +321,38 @@ function displayExpensePage(expenses, currentExpensePage = 1) {
     });
 }
 
+
 function paginate(expenseData) {
-    const currentExpensePage = document.getElementById('currentPage').textContent;
-    console.log( "From Paginate =>",currentExpensePage);
-    const isExpense = !Array.isArray(expenseData);
-    if (isExpense) {
-        expenseData = [expenseData];
-    }
     const totalPages = Math.ceil(expenseData.length / rowsPerPage);
     const prevPageButton = document.getElementById('prevPage');
     const nextPageButton = document.getElementById('nextPage');
 
-    // Update current page text
     document.getElementById('currentPage').textContent = `Page ${currentExpensePage}`;
 
-    if (currentExpensePage === 1) {
-        prevPageButton.disabled = true;
-    } else {
-        prevPageButton.disabled = false;
-    }
+    prevPageButton.disabled = currentExpensePage === 1;
+    nextPageButton.disabled = currentExpensePage >= totalPages;
 
-    if (currentExpensePage === totalPages) {
-        nextPageButton.disabled = true;
-    } else {
-        nextPageButton.disabled = false;
-    }
-
-    // Calculate the start and end indexes for the current page
     const startIndex = (currentExpensePage - 1) * rowsPerPage;
-    const endIndex = startIndex + rowsPerPage;
+    const endIndex = Math.min(startIndex + rowsPerPage, expenseData.length);
 
-    // Extract the expenses for the current page
     const expensesForCurrentPage = expenseData.slice(startIndex, endIndex);
 
-    // Display the expenses for the current page
     displayExpensePage(expensesForCurrentPage);
 }
 
-// Event listener for the 'Previous' button
+
 document.getElementById('prevPage').addEventListener('click', () => {
-    const currentExpensePage = document.getElementById('currentPage').textContent;
-    console.log( "From prevpage =>",currentExpensePage);
     if (currentExpensePage > 1) {
         currentExpensePage--;
         paginate(expenseData);
     }
 });
 
-// Event listener for the 'Next' button
 document.getElementById('nextPage').addEventListener('click', () => {
-    const currentExpensePage = document.getElementById('currentPage').textContent;
-    console.log( "From nextPage =>",currentExpensePage);
     const totalPages = Math.ceil(expenseData.length / rowsPerPage);
     if (currentExpensePage < totalPages) {
         currentExpensePage++;
         paginate(expenseData);
     }
 });
+

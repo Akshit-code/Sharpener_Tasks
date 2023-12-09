@@ -1,10 +1,13 @@
+const dotenv = require('dotenv');
+const config = dotenv.config();
+
 const {Sequelize} = require('sequelize');
 const sequelize = new Sequelize (
-    'fullstack_expense_tracker',
-    'root',
-    'Hidden Password',
+    `${process.env.DATABASE_DEFAULT}`,
+    `${process.env.DATABASE_USER}`,
+    `${process.env.DATABASE_PASSWORD}`,
     {
-        host: 'localhost',
+        host: `${process.env.DATABASE_HOST}`,
         dialect: 'mysql'
     }
 );

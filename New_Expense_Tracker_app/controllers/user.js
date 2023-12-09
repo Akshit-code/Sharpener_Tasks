@@ -18,30 +18,34 @@ let apiKey = defaultClient.authentications['api-key'];
 apiKey.apiKey = process.env.SIB_KEY;
 
 exports.register = async (req, res, next) => {
+    let transaction = await sequelize.transaction();
     try {
         const salt = await bcrypt.genSalt(10);
         const hashPassword = await bcrypt.hash(req.body.password, salt);
 
         req.body.id = req.body.email;
         req.body.password = hashPassword;
-        const isExistingUser = await User.findByPk(req.body.email);
+        const isExistingUser = await User.findByPk(req.body.email, {transaction});
 
         if(!isExistingUser) {
-            const user = await User.create(req.body);
+            const user = await User.create(req.body, {transaction});
             console.log("New User Added")
-            console.log(req.body);
+            transaction.commit();
             return res.status(201).json(req.body);
         } else {
+            transaction.rollback();
             console.log("User Already Exits");
             return res.status(200).json(req.body);
         }
     } catch (error) {
         console.error(error);
+        transaction.rollback();
         res.status(500).json('Internal Server Error');
     }
 }
 
 exports.login = async (req, res, next) =>  {
+    let transaction = await sequelize.transaction();
     try {
         const isExistingUser = await User.findByPk(req.body.email);
         if(isExistingUser) {
@@ -69,12 +73,12 @@ exports.login = async (req, res, next) =>  {
 };
 
 exports.forgotPasword = async (req, res, next) => {
-    
+    let transaction = await sequelize.transaction();
     try {
         const uniqueId = uuid.v4();
-        console.log("Unique:ID =>", uniqueId);
-        const isExistingUser = await User.findOne({ where: { email: req.body.email } });
+        const isExistingUser = await User.findOne({ where: { email: req.body.email } }, {transaction});
         if(!isExistingUser) {
+            transaction.rollback();
             return res.status(404).json({message: "User not found"});
         }
         const options = {
@@ -84,11 +88,9 @@ exports.forgotPasword = async (req, res, next) => {
             UserId: isExistingUser.id
         };
         
-        const insertQuery = ResetPassword.create({id, isActive, email, UserId} = options );
-
+        const insertQuery = ResetPassword.create({id, isActive, email, UserId} = options, {transaction} );
+        transaction.commit();
         const apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
-        
-        // Creating email details
         const sendSmtpEmail = new SibApiV3Sdk.SendSmtpEmail();
         sendSmtpEmail.sender = { email: 'akshitmandani100@gmail.com', name: 'Akshit Mandani' }; // Replace with your email and name
         sendSmtpEmail.to = [{ email:req.body.email }];
@@ -102,45 +104,41 @@ exports.forgotPasword = async (req, res, next) => {
                 </body>
             </html>
         `;
-        sendSmtpEmail.subject = 'Password Reset'; // Email subject
-
-        // Send the email
+        sendSmtpEmail.subject = 'Password Reset'; 
         const sendSmtpEmailResponse = await apiInstance.sendTransacEmail(sendSmtpEmail, apiKey);
         console.log('Email sent successfully:', sendSmtpEmailResponse);
-
         res.status(200).json(options);
     } catch (error) {
+        transaction.rollback();
         console.log(error);
     }
 };
 
 exports.resetPassword = async (req, res, next) => {
-    console.log("From Reset Controller => ", req.body);
+    let transaction = await sequelize.transaction();
     try {
-        const resetEntry = await ResetPassword.findOne({ where: { id: req.body.uniqueId, isActive: true } });
+        const resetEntry = await ResetPassword.findOne({ where: { id: req.body.uniqueId, isActive: true } },{transaction});
 
         if (resetEntry) {
             const salt = await bcrypt.genSalt(10);
             const hashPassword = await bcrypt.hash(req.body.resetPassword, salt);
-
             const userId = resetEntry.UserId;
-
-            // Update the user's password based on the reset entry
-            const user = await User.findByPk(userId); // Assuming UserId is the association key
+            const user = await User.findByPk(userId, {transaction});
             if (user) {
-                await user.update({ password: hashPassword });
-                // Deactivate the reset entry after password change
-                await resetEntry.update({ isActive: false });
-
+                await user.update({ password: hashPassword } , {transaction});
+                await resetEntry.update({ isActive: false }, {transaction});
                 res.status(200).json({ message: "Password reset successful" });
             } else {
+                transaction.rollback();
                 res.status(404).json({ message: "User not found" });
             }
         } else {
+            transaction.rollback();
             res.status(404).json({ message: "Invalid or expired reset link" });
         }
     } catch (error) {
         console.log(error);
+        transaction.rollback();
         res.status(500).json({ message: "Internal Server Error" });
     }
 };

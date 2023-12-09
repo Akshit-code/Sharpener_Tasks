@@ -11,6 +11,9 @@ const SibApiV3Sdk = require('sib-api-v3-sdk');
 const uuid = require('uuid');
 const AWS = require('aws-sdk');
 const multer = require('multer');
+const helmet = require('helmet');
+const morgan = require('morgan');
+
 
 const sequelize = require('./util/database');
 const razorPayInstance = require('./util/razorPay');
@@ -21,6 +24,9 @@ const Orders = require('./models/orders');
 const ResetPassword = require('./models/resetPassword');
 const Report = require('./models/report');
 
+app.use(helmet());
+const accessLogStream = fs.createWriteStream(path.join(__dirname, 'access.log'), {flags:'a'});
+app.use(morgan('combined', {stream:accessLogStream}));
 app.use(cors());
 app.use(bodyParser.urlencoded( { extended:false }));
 app.use(express.json());
@@ -37,6 +43,16 @@ ResetPassword.belongsTo(User);
 
 User.hasMany(Report);
 Report.belongsTo(User);
+
+
+app.use((req, res, next) => {
+    res.setHeader(
+      'Content-Security-Policy',
+      "script-src 'self' https://checkout.razorpay.com; " +
+      "script-src-elem 'self' https://checkout.razorpay.com;"
+    );
+    next();
+});
 
 app.use("/homepage", routes);
 app.use("/homepage", (req, res, next) => {

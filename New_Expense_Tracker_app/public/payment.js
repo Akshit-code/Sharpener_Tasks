@@ -14,7 +14,6 @@ async function buyPremiumFunction() {
         }
 
         const responseData = await response.json();
-        console.log(responseData);
         const options = {
             key: responseData.razorPayId, 
             amount: responseData.amount,
@@ -25,10 +24,10 @@ async function buyPremiumFunction() {
                 if (response.razorpay_payment_id) {
                     // Payment successful
                     await addOrder(response, responseData.amount);
-                    alert('Payment Successful!');
+                    alert('Payment Successful !!!');
                     localStorage.setItem("isPremiumUser", true);
                     toggleUI();
-                    console.log("After Payment: ", response);
+                    console.log("Payment Successful !!!");
                 }
             },
             theme: {
@@ -47,11 +46,11 @@ async function buyPremiumFunction() {
             alert(response.error.reason);
             alert(response.error.metadata.order_id);
             alert(response.error.metadata.payment_id);
+            console.log("Payment Failed !!!");
         });
         
     } catch (error) {
         console.error(error);
-        // Handle errors here
     }
 }
 
@@ -76,7 +75,6 @@ async function addOrder(response, amount) {
         }
     } catch (error) {
         console.error('Error in addOrder:', error);
-        // Handle errors in addOrder here
     }
 };
 

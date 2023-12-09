@@ -7,7 +7,6 @@ const User = require('../models/user');
 exports.addExpense = async (req, res, next) => {
     try {
         let transaction = await sequelize.transaction();
-        console.log("from addExpenseController", req.body);
         const expense = await Expense.create ( {
             amount:req.body.amount,
             desc: req.body.desc,
@@ -23,7 +22,7 @@ exports.addExpense = async (req, res, next) => {
         const totalExpense = await(Expense.sum('amount', {where : {UserId: req.body.userId}, transaction}));
         const user = await User.findByPk(req.body.userId, {transaction});
         if (user) {
-            user.totalExpense = totalExpense || 0; // Assign total expenses or default to 0 if null
+            user.totalExpense = totalExpense || 0;
             await user.save({transaction});
         }
 
@@ -32,7 +31,7 @@ exports.addExpense = async (req, res, next) => {
         //res.redirect('/');
     } catch (error) {
         console.error(error);
-        if (transaction) await transaction.rollback(); // Rollback the transaction on error
+        if (transaction) await transaction.rollback();
         res.status(500).send('Server Error');
     }
 };
@@ -51,27 +50,26 @@ exports.deleteExpense = async (req, res, next) => {
         const totalExpense = await(Expense.sum('amount', {where : {UserId: req.body.userId}, transaction}));
         const user = await User.findByPk(req.body.userId, {transaction});
         if (user) {
-            user.totalExpense = totalExpense || 0; // Assign total expenses or default to 0 if null
+            user.totalExpense = totalExpense || 0; 
             await user.save({transaction});
         }
 
-        await transaction.commit(); // Commit the transaction if successful
+        await transaction.commit(); 
         res.status(200).send("Expense deleted successfully");
     } catch (error) {
-        if (transaction) await transaction.rollback(); // Rollback the transaction on error
+        if (transaction) await transaction.rollback(); 
         res.status(500).send('Server Error');
     }
 };
 
 exports.editExpense = async (req, res, next) => {
     try {
-        console.log("From Edit controller", req.body);
         let transaction = await sequelize.transaction();
         const editId = req.params.id;
         const expenseToEdit = await Expense.findByPk(editId, {transaction});
 
         if (!expenseToEdit) {
-            await transaction.rollback(); // Rollback the transaction if expense is not found
+            await transaction.rollback(); 
             return res.status(404).send("Expense not found");
         }
 
@@ -90,7 +88,7 @@ exports.editExpense = async (req, res, next) => {
         const totalExpense = await(Expense.sum('amount', {where : {UserId: req.body.userId}, transaction}));
         const user = await User.findByPk(req.body.userId, {transaction});
         if (user) {
-            user.totalExpense = totalExpense || 0; // Assign total expenses or default to 0 if null
+            user.totalExpense = totalExpense || 0; 
             await user.save({transaction});
         }
 
@@ -104,7 +102,6 @@ exports.editExpense = async (req, res, next) => {
 };
 
 exports.getAllExpenses = async (req, res, next) =>{
-    console.log("From Get all Expenses: ", req.body);
     try {
         const expenses = await Expense.findAll({
             where: {UserId:req.body.email},
@@ -113,7 +110,7 @@ exports.getAllExpenses = async (req, res, next) =>{
         if (!expenses || expenses.length === 0) {
             return res.status(204).json({ message: 'No expenses found for the provided email' });
         }
-        console.log(expenses);
+        console.log("Fetched User All Expenses SuccessFuly ");
         res.status(200).json(expenses);
     } catch (error) {
         console.error(error);
