@@ -33,91 +33,11 @@ expenseForm.addEventListener('submit', function(e) {
     expenseForm.style.display="none";
     addExpense(expense);
 });
-
-// const table = document.createElement("table");
-// table.classList.add("expense-table");
-
-// const headerRow = table.insertRow();
-// const headers = ["Date","Amount", "Description", "Category", "Edit", "Delete"];
-// headers.forEach((headerText) => {
-//     const headerCell = document.createElement("th");
-//     headerCell.textContent = headerText;
-//     headerCell.classList.add("expense-header");
-//     headerRow.appendChild(headerCell);
-// });
-
-// function displayExpense(expense) {
-//     displayExpensesDiv.style.display = 'block';
-//     const editID = expense.expensesId;
-//     const deleteID = expense.expensesId ;
-
-//     const row = table.insertRow();
-//     const cell1 = row.insertCell(0);
-//     const cell2 = row.insertCell(1);
-//     const cell3 = row.insertCell(2);
-//     const cell4 = row.insertCell(3);
-//     const cell5 = row.insertCell(4);
-//     const cell6 = row.insertCell(5);
-//     const date = new Date((expense.date));
-//     const constformattedDate = date.toLocaleDateString('en-GB', { timeZone: 'UTC' });
-//     cell1.innerHTML = constformattedDate;
-//     cell2.innerHTML = expense.amount;
-//     cell3.innerHTML = expense.desc;
-//     cell4.innerHTML = expense.category;
-
-//     const editBtn = document.createElement("button");
-//     const delBtn = document.createElement("button");
-//     editBtn.innerHTML = "Edit";
-//     delBtn.innerHTML = "Delete";
-//     editBtn.classList.add("edit-button");
-//     delBtn.classList.add("delete-button");
-//     cell5.appendChild(editBtn);
-//     cell6.appendChild(delBtn);
-//     let updateBtn;
-
-//     editBtn.addEventListener("click", function() {
-//         expenseFormDiv.style.display = "block";
-//         expenseForm.style.display="block";
-//         isEditing = true;
-//         input1.value = expense.amount;
-//         input2.value = expense.desc;
-//         input3.value = expense.category;
-//         p.remove();
-//         editBtn.remove();
-//         delBtn.remove();
-//         submitBtn.disabled = true;
-//         updateBtn = document.createElement("button");
-//         updateBtn.innerHTML = "Update";
-//         document.getElementById("form-fieldset").appendChild(updateBtn);
-//         updateBtn.addEventListener("click", function() {
-//             expense.amount = input1.value;
-//             expense.desc = input2.value;
-//             expense.category = input3.value;
-//             editExpense(expense, editID);
-//             updateBtn.remove();
-//             isEditing = false;
-//             expenseFormDiv.style.display = "none";
-//             expenseForm.style.display="none";
-//         });
-//     });
-
-//     delBtn.addEventListener("click", function() {
-//         deleteExpense(deleteID);
-//         p.remove();
-//         editBtn.remove();
-//         delBtn.remove();
-//     });
-//     displayExpensesDiv.appendChild(table);
-//     input1.value = '';
-//     input2.value = '';
-//     input3.value = '';
-// }
-
 async function addExpense(expense) {
     try {
         const token = localStorage.getItem('token');
         console.log(token);
-        const response = await fetch(`http://localhost:3000/homepage/add-expense`, {
+        const response = await fetch(`/homepage/add-expense`, {
             method:'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -142,7 +62,7 @@ async function addExpense(expense) {
 async function deleteExpense( deleteID ) {
     try {
         const token = localStorage.getItem('token');
-        const response = await fetch(`http://localhost:3000/homepage/delete-expense/${deleteID}`, {
+        const response = await fetch(`/homepage/delete-expense/${deleteID}`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
@@ -158,7 +78,7 @@ async function deleteExpense( deleteID ) {
 async function editExpense(expense, editID) {
     try {
         const token = localStorage.getItem('token');
-        const response = fetch (`http://localhost:3000/homepage/edit-expense/${editID}`, {
+        const response = fetch (`/homepage/edit-expense/${editID}`, {
             method:'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -193,7 +113,7 @@ let expenseData;
 async function getExpenses() {
     try {
         const token = localStorage.getItem('token');
-        const response = await fetch(`http://localhost:3000/homepage/get-expenses`, {
+        const response = await fetch(`/homepage/get-expenses`, {
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`

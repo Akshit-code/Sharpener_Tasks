@@ -1,7 +1,7 @@
 async function buyPremiumFunction() {
     try {
         const token = localStorage.getItem('token');
-        const response = await fetch('http://localhost:3000/payment/createOrder', {
+        const response = await fetch('/payment/createOrder', {
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
@@ -57,7 +57,7 @@ async function buyPremiumFunction() {
 async function addOrder(response, amount) {
     const token = localStorage.getItem('token');
     try {
-        const x = await fetch(`http://localhost:3000/payment/addOrder`, {
+        const x = await fetch(`/payment/addOrder`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

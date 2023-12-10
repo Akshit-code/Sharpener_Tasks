@@ -96,7 +96,7 @@ loginForm.addEventListener("submit", (e)=> {
 
 async function registerUser(user)  {
     try {
-        const response = await fetch(`http://localhost:3000/user/register`, {
+        const response = await fetch(`/user/register`, {
             method: 'POST',
             headers:{
                 'Content-Type': 'application/json'
@@ -136,7 +136,7 @@ addExpensesBtn.classList.add("log");
 
 async function loginUser(user) {
     try {
-        const response = await fetch(`http://localhost:3000/user/login`, {
+        const response = await fetch(`/user/login`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -180,7 +180,7 @@ forgotPasswordForm.addEventListener("submit", (e)=> {
 async function forgotPasswordFunction(user) {
     console.log(user);
     try {
-        const response = await fetch('http://localhost:3000/user/forgotPassword', {
+        const response = await fetch('/user/forgotPassword', {
             method:'POST',
             headers:{
                 'Content-Type': 'application/json',

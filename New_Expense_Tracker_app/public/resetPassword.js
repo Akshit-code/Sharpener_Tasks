@@ -23,14 +23,14 @@ resetPasswordBtn.addEventListener("click", (e)=> {
         uniqueId:requestId
     }
     
-    // window.location.href = "http://localhost:3000/homepage";
+    window.location.href = "/homepage";
     resetPasswordFunction(resetDetails);
 });
 
 async function resetPasswordFunction(resetDetails) {
     console.log(resetDetails);
     try {
-        const response = await fetch(`http://localhost:3000/user/resetpassword/:uniqueId`,{
+        const response = await fetch(`/resetpassword/:uniqueId`,{
             method:'POST',
             headers:{
                 'Content-Type':'application/json'
@@ -39,7 +39,7 @@ async function resetPasswordFunction(resetDetails) {
         })
 
         if (response.status === 200) {
-            window.location.href = "http://localhost:3000";
+            window.location.href = "/";
             const data =  await response.json()
             console.log(data);
         } else {

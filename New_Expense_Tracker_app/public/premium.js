@@ -16,7 +16,7 @@ refreshLeadBoardBtn.addEventListener("click", getLeaderBoardDetails);
 async function getLeaderBoardDetails() {
     try {
         const token = localStorage.getItem('token');
-        const response = await fetch('http://localhost:3000/premium/getLeaderBoardDetails', {
+        const response = await fetch('/premium/getLeaderBoardDetails', {
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
@@ -116,7 +116,7 @@ async function uploadToS3(file, fileName) {
         const formData = new FormData();
         formData.append('file', file);
         formData.append('fileName', fileName);
-        const response = await fetch('http://localhost:3000/premium/generateReport', {
+        const response = await fetch('/premium/generateReport', {
             method:'POST',
             headers: {
                 'Authorization': `Bearer ${token}`
@@ -145,7 +145,7 @@ async function uploadToS3(file, fileName) {
 async function fetchReports() {
     try {
         const token = localStorage.getItem('token');
-        const response = await fetch('http://localhost:3000/premium/reports', {
+        const response = await fetch('/premium/reports', {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -239,31 +239,4 @@ function updatePaginationButtons() {
         });
     }
 }
-
-// filterBtn.addEventListener("click", ()=> {
-//     const startDate = new Date(startDateInput.value);
-//     //const formatedtartDate = startDate.toLocaleDateString('en-GB', { timeZone: 'UTC' });
-//     const endDate = new Date (endDateInput.value);
-//     //const formattedEndDate = endDate.toLocaleDateString('en-GB', { timeZone: 'UTC' });
-//     console.log(expenseData);
-//     const filteredExpenses = expenseData.filter(expense => {
-//         const expenseDate = new Date(expense.updatedAt);
-//         return expenseDate >= startDate && expenseDate <= endDate;
-//     });
-//     console.log(filteredExpenses);
-//     filteredExpenses.forEach(element => {
-//         const expense = {
-//             amount: element.amount,
-//             desc: element.desc,
-//             category: element.category, 
-//             expensesId : element.id,
-//             date: element.updatedAt
-//         };
-//         displayExpense(expense);
-//     });
-//     console.log("Start Date:", startDate);
-//     console.log("End Date:", endDate);
-//     startDateInput.value = '';
-//     endDateInput.value = '';
-// });
 
